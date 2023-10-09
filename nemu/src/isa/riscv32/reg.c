@@ -31,7 +31,9 @@ void isa_reg_display() {
     for(int j=0;j<sizeof(uint32_t);j++){
       printf("\e[1;36m%3s:\e[0m %#12x | ", regs[i], cpu.gpr[j]);
     }
+    printf("\n");
   }
+  
 
 }
 
