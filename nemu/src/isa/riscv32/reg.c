@@ -24,17 +24,29 @@ const char *regs[] = {
 };
 // #define REG_NUM 32
 
+// void isa_reg_display() {
+//   int length = ARRLEN(regs);
+//   printf("========debug: register info===========\n");
+//   for(int i=0;i<length;i++){
+//     for(int j=0;j<sizeof(uint32_t);j++){
+//       printf("\e[1;36m%3s:\e[0m %#12x | ", regs[i], cpu.gpr[j]);
+//     }
+//     printf("\n");
+//   }
+// }
+#define REGISTERS_PER_LINE 4
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+
 void isa_reg_display() {
   int length = ARRLEN(regs);
-  printf("========debug: register info===========\n");
-  for(int i=0;i<length;i++){
-    for(int j=0;j<sizeof(uint32_t);j++){
-      printf("\e[1;36m%3s:\e[0m %#12x | ", regs[i], cpu.gpr[j]);
+  int i = 0;
+  printf("=========寄存器信息=========\n");
+  for (i = 0; i < length; i+= REGISTERS_PER_LINE){
+    for (int j = i; j < MIN(length, i + REGISTERS_PER_LINE); ++j){
+      printf("\e[1;36m%3s:\e[0m %#12x | ", regs[j], cpu.gpr[j]);
     }
     printf("\n");
   }
-  
-
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
