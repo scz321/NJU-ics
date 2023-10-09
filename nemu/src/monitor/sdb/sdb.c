@@ -52,6 +52,33 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args){
+  //输入的是字符串，需要先转换成int
+  int n=1;
+  if(args!=NULL){
+      sscanf(args,"%d",&n);
+  }
+  cpu_exec(n);
+  return 0;
+}
+
+
+static int cmd_info(char *args){
+  if(args==NULL){
+    printf("缺少参数！\n");
+  }
+  else if(strcmp(args,"r")==0){
+    isa_reg_display();
+  }
+  else if(strcmp(args,"w")){
+    //watchpoint_display();
+  }
+  else{
+    printf("参数有误！\n");
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -59,9 +86,16 @@ static struct {
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
+
+
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  {"si","执行指定数量的指令，缺省为1",cmd_si},
+  {"info","打印寄存器/监视点信息",cmd_info},
+
+
+  
 
   /* TODO: Add more commands */
 

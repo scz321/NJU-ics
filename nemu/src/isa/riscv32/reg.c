@@ -22,8 +22,17 @@ const char *regs[] = {
   "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
+// #define REG_NUM 32
 
 void isa_reg_display() {
+  int length = ARRLEN(regs);
+  printf("========debug: register info===========\n");
+  for(int i=0;i<length;i++){
+    for(int j=0;j<sizeof(uint32_t);j++){
+      printf("\e[1;36m%3s:\e[0m %#12x | ", regs[i], cpu.gpr[j]);
+    }
+  }
+
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
