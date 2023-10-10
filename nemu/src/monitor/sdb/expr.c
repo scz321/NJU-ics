@@ -82,9 +82,10 @@ static Token tokens[32] __attribute__((used)) = {};
 
 static int nr_token __attribute__((used))  = 0;
 
-//这里我略作修改，把static关键字删除以便在sdb.c中调用
-bool make_token(char *e) {
-  printf("当前字符串：%s\n",e);
+// 这里我略作修改，把static关键字删除以便在sdb.c中调用
+bool make_token(char *e)
+{
+
   int position = 0;
   int i;
 
@@ -92,12 +93,15 @@ bool make_token(char *e) {
 
   nr_token = 0;
 
-  while (e[position] != '\0') {
+  while (e[position] != '\0')
+  {
     /* Try all rules one by one. */
 
-    //这里的re存储编译后的正则表达式结果，包括了含rules在内的诸多信息
-    for (i = 0; i < NR_REGEX; i ++) {
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+    // 这里的re存储编译后的正则表达式结果，包括了含rules在内的诸多信息
+    for (i = 0; i < NR_REGEX; i++)
+    {
+      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0)
+      {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -111,71 +115,75 @@ bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          case '+':
-            tokens[nr_token].type='+';
-            nr_token++;
-            break;
-          case '-':
-            tokens[nr_token].type='-';
-            nr_token++;
-            break;
-          case TK_NOTYPE:
-            tokens[nr_token].type=TK_NOTYPE;
-            nr_token++;
-            break;
-          case TK_EQ:
-            tokens[nr_token].type=TK_EQ;
-            nr_token++;
-            break;
-          case '*':
-            tokens[nr_token].type='*';
-            nr_token++;
-            break;
-          case '/':
-            tokens[nr_token].type='/';
-            nr_token++;
-            break;
-          case DIGIT:
-            tokens[nr_token].type = DIGIT;
-            int len = substr_len < sizeof(tokens[nr_token].str) - 1 ? substr_len : sizeof(tokens[nr_token].str) - 1;
-            strncpy(tokens[nr_token].str, substr_start, len);
-            tokens[nr_token].str[len] = '\0';
-            nr_token++;
-            break;
-          //这里需要注意的是，括号的匹配是在“语法分析”中进行的工作，而非词法分析
-          case '(':
-            tokens[nr_token].type='(';
-            //这里目前感觉是不需要进行值的记录的，目前记录DIGIT就够了
-            //楼上有点蠢，你不记录，后续怎么知道括号表达式中有什么呢？要知道，词法分析的终极目标就是
-            //解析出所有符合条件的最小词法单元
-            
-            //
-            nr_token++;
-            break;
-          case ')':
-            tokens[nr_token++].type=')';
-            break;
-          default: 
-            printf("意外的tokenType！\n");
-            break;
+        switch (rules[i].token_type)
+        {
+        case '+':
+          tokens[nr_token].type = '+';
+          nr_token++;
+          break;
+        case '-':
+          tokens[nr_token].type = '-';
+          nr_token++;
+          break;
+        case TK_NOTYPE:
+          tokens[nr_token].type = TK_NOTYPE;
+          nr_token++;
+          break;
+        case TK_EQ:
+          tokens[nr_token].type = TK_EQ;
+          nr_token++;
+          break;
+        case '*':
+          tokens[nr_token].type = '*';
+          nr_token++;
+          break;
+        case '/':
+          tokens[nr_token].type = '/';
+          nr_token++;
+          break;
+        case DIGIT:
+          tokens[nr_token].type = DIGIT;
+          int len = substr_len < sizeof(tokens[nr_token].str) - 1 ? substr_len : sizeof(tokens[nr_token].str) - 1;
+          strncpy(tokens[nr_token].str, substr_start, len);
+          tokens[nr_token].str[len] = '\0';
+          nr_token++;
+          break;
+        // 这里需要注意的是，括号的匹配是在“语法分析”中进行的工作，而非词法分析
+        case '(':
+          tokens[nr_token].type = '(';
+          // 这里目前感觉是不需要进行值的记录的，目前记录DIGIT就够了
+          // 楼上有点蠢，你不记录，后续怎么知道括号表达式中有什么呢？要知道，词法分析的终极目标就是
+          // 解析出所有符合条件的最小词法单元
+
+          //
+          nr_token++;
+          break;
+        case ')':
+          tokens[nr_token++].type = ')';
+          break;
+        default:
+          printf("意外的tokenType！\n");
+          break;
         }
 
-        //这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
+        // 这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
         break;
       }
     }
-    
-    if (i == NR_REGEX) {
+
+    printf("当前字符串：%s\n",e);
+    printf("i:%d,NR_REGEX:%d\n",i,NR_REGEX);
+    if (i == NR_REGEX)
+    {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
-
   }
   printf("=================\n");
-    for(int i=0;i<nr_token;i++){
-        printf("make_token函数执行完成，输出tokesStr:%s\n",tokens[i].str);
-    }
+  for (int i = 0; i < nr_token; i++)
+  {
+    printf("make_token函数执行完成，输出tokesStr:%s\n", tokens[i].str);
+  }
   printf("=================\n");
   // while(getchar()!='\n'){
   //   printf("输入回车继续执行");
