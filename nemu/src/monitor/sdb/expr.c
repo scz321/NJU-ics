@@ -22,7 +22,7 @@
 
 enum {
   //默认情况下，后一个枚举值会比前一个枚举值大1，这里设计成256开始也是有讲究的
-  TK_NOTYPE = 256, TK_EQ,DIGIT
+  TK_NOTYPE = 256, TK_EQ,DIGIT,PARENTHESES
 
   /* TODO: Add more token types */
 
@@ -46,8 +46,8 @@ static struct rule {
   {"-",'-'},        
   {"\\*",'*'},
   {"/",'/'},
-  {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT}
-
+  {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT},
+  {"(.*)",PARENTHESES},
   
 };
 
@@ -139,6 +139,11 @@ bool make_token(char *e) {
             int len = substr_len < sizeof(tokens[nr_token].str) - 1 ? substr_len : sizeof(tokens[nr_token].str) - 1;
             strncpy(tokens[nr_token].str, substr_start, len);
             tokens[nr_token].str[len] = '\0';
+            nr_token++;
+            break;
+          case PARENTHESES:
+            tokens[nr_token].type=PARENTHESES;
+            //这里目前感觉是不需要进行值的记录的，目前记录DIGIT就够了
             nr_token++;
             break;
           default: 
