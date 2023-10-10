@@ -84,6 +84,7 @@ static int nr_token __attribute__((used))  = 0;
 
 //这里我略作修改，把static关键字删除以便在sdb.c中调用
 bool make_token(char *e) {
+  printf("当前字符串：%s\n",e);
   int position = 0;
   int i;
 
