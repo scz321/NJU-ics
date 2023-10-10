@@ -89,10 +89,12 @@ static int cmd_p(char *args){
     return -1;
   }
   bool ret;
+  int expr_ret=-1;
   expr(args,&ret);
   if(ret==false){
     printf("make_token执行失败！\n");
   }
+  printf("expr计算结果：%d",expr_ret);
   return 0;
 }
 

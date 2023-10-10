@@ -164,21 +164,21 @@ bool make_token(char *e) {
         break;
       }
     }
-
+    
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
 
   }
-printf("=================\n");
-  for(int i=0;i<nr_token;i++){
-      printf("make_token函数执行完成，输出tokesStr:%s\n",tokens[i].str);
-  }
-printf("=================\n");
-while(getchar()!='\n'){
-  printf("输入回车继续执行");
-}
+  printf("=================\n");
+    for(int i=0;i<nr_token;i++){
+        printf("make_token函数执行完成，输出tokesStr:%s\n",tokens[i].str);
+    }
+  printf("=================\n");
+  // while(getchar()!='\n'){
+  //   printf("输入回车继续执行");
+  // }
 
   return true;
 }
