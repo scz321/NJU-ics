@@ -18,7 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
-#include "expr.c"
+
 
 static int is_batch_mode = false;
 
@@ -80,6 +80,9 @@ static int cmd_info(char *args){
   return 0;
 }
 
+
+
+bool make_token(char *e);//测试需要
 static int cmd_p(char *args){
   if(args==NULL){
     printf("缺少表达式！\n");
