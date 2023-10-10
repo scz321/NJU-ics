@@ -148,8 +148,7 @@ bool make_token(char *e) {
             //这里目前感觉是不需要进行值的记录的，目前记录DIGIT就够了
             //楼上有点蠢，你不记录，后续怎么知道括号表达式中有什么呢？要知道，词法分析的终极目标就是
             //解析出所有符合条件的最小词法单元
-
-
+            
             //
             nr_token++;
             break;
@@ -183,7 +182,8 @@ while(getchar()!='\n'){
 
   return true;
 }
-
+bool check_parentheses(int st,int ed);
+word_t eval(int p, int q);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -192,7 +192,101 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  //下面开始伟大的递归求值!
+
 
   return 0;
+}
+
+//返回0，对应+-的优先级，1对应*/
+int opLevel(int type){
+  if(type=='+'||type=='-')
+    return 0;
+  if(type=='*'||type=='/')
+    return 1;
+  return -1;
+}
+
+word_t eval(int p, int q) {
+  if (p > q) {
+    /* Bad expression */
+    printf("Bad expression!!\n");
+    return -1;
+  }
+  else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    word_t ret=-1;
+    char *endptr; // 用于存储转换后剩余的未处理部分的地址
+    ret=(word_t)strtoul(tokens[p].str,&endptr,10);
+    return ret;
+  }
+  else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }
+  else {
+    //首先需要寻找主运算符,逻辑不难，从左到右找优先级最低的运算符
+    int opPosition=-1;
+    for(int i=p;i<q;i++){
+      int type=tokens[i].type;
+      if(opLevel(type)==0){
+        opPosition=i;
+        break;
+      }
+    }
+    //如果不存在+-运算：
+    if (opPosition == -1)
+    {
+      for (int i = p; i < q; i++)
+      {
+        int type = tokens[i].type;
+        if (opLevel(type) == 1)
+        {
+          opPosition = i;
+          break;
+        }
+      }
+    }
+    //如果*/也没有
+    if(opPosition==-1){
+      printf("当前表达式没有运算符，不合理！\n");
+      return  -1;
+    }
+
+    struct token mainOp=tokens[opPosition];
+
+
+    word_t val1 = eval(p, opPosition - 1);
+    word_t val2 = eval(opPosition + 1, q);
+
+    switch (mainOp.type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+}
+
+bool check_parentheses(int st,int ed){
+  if(tokens[st].type!='('){
+    return false;
+  }
+  if(tokens[ed].type!=')'){
+    return false;
+  }
+  st++;
+ 
+  while(st!=ed){
+    if(tokens[st].type=='('||tokens[st].type==')')
+      return false;
+    st++;
+  }
+  return true;
 }
