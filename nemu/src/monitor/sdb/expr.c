@@ -159,7 +159,7 @@ bool make_token(char *e) {
   }
 printf("=================\n");
   for(int i=0;i<nr_token;i++){
-      printf("make_token函数执行完成，输出tokesType:%d",tokens[i].type);
+      printf("make_token函数执行完成，输出tokesType:%d\n",tokens[i].type);
   }
 printf("=================\n");
 while(getchar()!='\n'){
