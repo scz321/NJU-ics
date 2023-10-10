@@ -22,7 +22,7 @@
 
 enum {
   //默认情况下，后一个枚举值会比前一个枚举值大1，这里设计成256开始也是有讲究的
-  TK_NOTYPE = 256, TK_EQ,DIGIT,PARENTHESES
+  TK_NOTYPE = 256, TK_EQ,DIGIT
 
   /* TODO: Add more token types */
 
@@ -47,7 +47,8 @@ static struct rule {
   {"\\*",'*'},
   {"/",'/'},
   {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT},
-  {"(.*)",PARENTHESES},
+  {"(",'('},
+  {")",')'}
   
 };
 
@@ -141,10 +142,19 @@ bool make_token(char *e) {
             tokens[nr_token].str[len] = '\0';
             nr_token++;
             break;
-          case PARENTHESES:
-            tokens[nr_token].type=PARENTHESES;
+          //这里需要注意的是，括号的匹配是在“语法分析”中进行的工作，而非词法分析
+          case '(':
+            tokens[nr_token].type='(';
             //这里目前感觉是不需要进行值的记录的，目前记录DIGIT就够了
+            //楼上有点蠢，你不记录，后续怎么知道括号表达式中有什么呢？要知道，词法分析的终极目标就是
+            //解析出所有符合条件的最小词法单元
+
+
+            //
             nr_token++;
+            break;
+          case ')':
+            tokens[nr_token++].type=')';
             break;
           default: 
             printf("意外的tokenType！\n");
