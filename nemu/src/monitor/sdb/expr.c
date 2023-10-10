@@ -21,7 +21,8 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  //默认情况下，后一个枚举值会比前一个枚举值大1，这里设计成256开始也是有讲究的
+  TK_NOTYPE = 256, TK_EQ,DIGIT
 
   /* TODO: Add more token types */
 
@@ -36,9 +37,18 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
+  //这里可能需要注意先后顺序
+  //另一个注意点是注意元字符和语言转义字符的混合使用，不要混淆
+
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"-",'-'},        
+  {"\\*",'*'},
+  {"/",'/'},
+  {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT}
+
+  
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -68,17 +78,22 @@ typedef struct token {
 } Token;
 
 static Token tokens[32] __attribute__((used)) = {};
+
 static int nr_token __attribute__((used))  = 0;
 
-static bool make_token(char *e) {
+//这里我略作修改，把static关键字删除以便在sdb.c中调用
+bool make_token(char *e) {
   int position = 0;
   int i;
+
   regmatch_t pmatch;
 
   nr_token = 0;
 
   while (e[position] != '\0') {
     /* Try all rules one by one. */
+
+    //这里的re存储编译后的正则表达式结果，包括了含rules在内的诸多信息
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
@@ -95,9 +110,43 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+          case '+':
+            tokens[nr_token].type='+';
+            nr_token++;
+            break;
+          case '-':
+            tokens[nr_token].type='-';
+            nr_token++;
+            break;
+          case TK_NOTYPE:
+            tokens[nr_token].type=TK_NOTYPE;
+            nr_token++;
+            break;
+          case TK_EQ:
+            tokens[nr_token].type=TK_EQ;
+            nr_token++;
+            break;
+          case '*':
+            tokens[nr_token].type='*';
+            nr_token++;
+            break;
+          case '/':
+            tokens[nr_token].type='/';
+            nr_token++;
+            break;
+          case DIGIT:
+            tokens[nr_token].type = DIGIT;
+            int len = substr_len < sizeof(tokens[nr_token].str) - 1 ? substr_len : sizeof(tokens[nr_token].str) - 1;
+            strncpy(tokens[nr_token].str, substr_start, len);
+            tokens[nr_token].str[len] = '\0';
+            nr_token++;
+            break;
+          default: 
+            printf("意外的tokenType！\n");
+            break;
         }
 
+        //这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
         break;
       }
     }
@@ -106,7 +155,16 @@ static bool make_token(char *e) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+
   }
+printf("=================\n");
+  for(int i=0;i<nr_token;i++){
+      printf("make_token函数执行完成，输出tokesType:%d",tokens[i].type);
+  }
+printf("=================\n");
+while(getchar()!='\n'){
+  printf("输入回车继续执行");
+}
 
   return true;
 }

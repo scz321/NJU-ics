@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "expr.c"
 
 static int is_batch_mode = false;
 
@@ -79,6 +80,16 @@ static int cmd_info(char *args){
   return 0;
 }
 
+static int cmd_p(char *args){
+  if(args==NULL){
+    printf("缺少表达式！\n");
+    return -1;
+  }
+
+  make_token(args);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -93,7 +104,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   {"si","执行指定数量的指令，缺省为1",cmd_si},
   {"info","打印寄存器/监视点信息",cmd_info},
-
+  {"p","表达式求值，这里的表达式支持寄存器",cmd_p},
 
   
 
