@@ -273,6 +273,7 @@ word_t eval(int p, int q) {
           braketCount--;
         if(braketCount<0){
           flag=false;
+          break;
         }
       }
       if (flag)
