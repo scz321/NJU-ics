@@ -156,7 +156,7 @@ void sdb_mainloop() {
   }
 
   //测试表达式求值start
-  FILE *file = fopen("input", "r");  // 打开文本文件
+  FILE *file = fopen("./input.txt", "r");  // 打开文本文件
 
   if (file == NULL) {
       perror("Unable to open file");
