@@ -258,6 +258,12 @@ word_t eval(int p, int q) {
     int opPosition=-1;//主运算符位置
     int braketCount=0;//记录当前的左括号、右括号出现的数量差距，当且仅当lPunm=RPnum=0时，该位置有可能成为mainOp
 
+
+    //由于当前情况下仍然有可能出现整个式子被括号包围的情况，这会导致整个表达式识别不出来mainOp的后果，因此需要作预处理
+    while(tokens[p].type=='('&&tokens[q].type==')'){
+      p++;
+      q--;
+    }
     for(int i=p;i<=q;i++){
       //printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
@@ -339,7 +345,8 @@ bool check_parentheses(int st,int ed){
   // }
 
   //10.11后记，上面的代码不是画蛇添足，比如对于下面的测试用例：
-  //((9285))/(7-((1-(3)+44*2)*254))*99+((7620))
+  //((9285))/(7-((1-(3)+44*2)*254))*99+((7620))，如果仅仅按照上面的两条规则，
+  //那么括号的“褪去”将会是不匹配的！
   //之前之所以想删除它，是为什么来着？
     while(st!=ed){
     if(tokens[st].type=='('||tokens[st].type==')')
