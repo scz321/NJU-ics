@@ -82,7 +82,7 @@ static int cmd_info(char *args){
 
 
 
-bool make_token(char *e);//
+
 static int cmd_p(char *args){
   if(args==NULL){
     printf("缺少表达式！\n");
@@ -90,7 +90,7 @@ static int cmd_p(char *args){
   }
   bool ret;
   int expr_ret=-1;
-  expr(args,&ret);
+  expr_ret=expr(args,&ret);
   if(ret==false){
     printf("make_token执行失败！\n");
   }
