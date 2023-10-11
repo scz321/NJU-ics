@@ -285,11 +285,11 @@ word_t eval(int p, int q) {
 
     int ret=-1;
     switch (mainOp.type) {
-      case '+': ret= val1 + val2;
-      case '-': ret= val1 - val2;
-      case '*': ret= val1 * val2;
-      case '/': ret= val1 / val2;
-      default: assert(0);
+      case '+': ret= val1 + val2;break;
+      case '-': ret= val1 - val2;break;
+      case '*': ret= val1 * val2;break;
+      case '/': ret= val1 / val2;break;
+      default: assert(0);break;
     }
     printf("  即将返回递归求值结果:%d\n",ret);
     return ret;
