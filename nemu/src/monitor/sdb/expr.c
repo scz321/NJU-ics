@@ -227,7 +227,7 @@ int opLevel(int type){
 
 word_t eval(int p, int q) {
   printf("  ");
-  printf("当st:%d,ed:%d\n",p,q);
+  printf("当前st:%d,ed:%d\n",p,q);
   if (p > q) {
     /* Bad expression */
     printf("Bad expression!!\n");
@@ -265,8 +265,7 @@ word_t eval(int p, int q) {
     while(tokens[P].type=='('&&tokens[Q].type==')'){
       bool flag = true;
       for (int i = p + 1; i < q - 1; i++)
-      {
-        
+      {        
         int type = tokens[i].type;
         if (type == '(')
           braketCount++;
@@ -285,7 +284,9 @@ word_t eval(int p, int q) {
       P++;
       Q--;
     }
-    printf("当前p:%d,当前q:%d\n",p,q);
+    
+    printf("当前实际进行遍历的p:%d,当前q:%d\n",p,q);
+    
     braketCount=0;
     for(int i=p;i<=q;i++){
       //printf("current bracketCount:%d\n",braketCount);
@@ -297,7 +298,7 @@ word_t eval(int p, int q) {
         braketCount--;
       if(braketCount==0&&opLevel(type)==0){
         opPosition=i;
-        break;
+        //break;
       }
     }
 
@@ -321,7 +322,7 @@ word_t eval(int p, int q) {
         if (braketCount==0&&opLevel(type) == 1)
         {
           opPosition = i;
-          break;
+          //break;八嘎，不能break！最后那一个才是mainOp
         }
       }
     }
@@ -333,7 +334,6 @@ word_t eval(int p, int q) {
     printf("当前mainOp位置:%d\n",opPosition);
 
     struct token mainOp=tokens[opPosition];
-
 
     word_t val1 = eval(p, opPosition - 1);
     word_t val2 = eval(opPosition + 1, q);
