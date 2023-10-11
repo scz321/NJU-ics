@@ -280,6 +280,8 @@ word_t eval(int p, int q) {
         q--;
       }
     }
+
+    braketCount=0;
     for(int i=p;i<=q;i++){
       printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
