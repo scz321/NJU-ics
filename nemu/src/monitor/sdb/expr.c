@@ -330,10 +330,10 @@ bool check_parentheses(int st,int ed){
   }
   st++;
  
-  while(st!=ed){
-    if(tokens[st].type=='('||tokens[st].type==')')
-      return false;
-    st++;
-  }
+  // while(st!=ed){
+  //   if(tokens[st].type=='('||tokens[st].type==')')
+  //     return false;
+  //   st++;
+  // }
   return true;
 }
