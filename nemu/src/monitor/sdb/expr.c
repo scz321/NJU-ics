@@ -260,9 +260,25 @@ word_t eval(int p, int q) {
 
 
     //由于当前情况下仍然有可能出现整个式子被括号包围的情况，这会导致整个表达式识别不出来mainOp的后果，因此需要作预处理
+    //执行这种消除的前提是，第一个括号和最后一个括号是匹配的括号！
     while(tokens[p].type=='('&&tokens[q].type==')'){
-      p++;
-      q--;
+      bool flag = true;
+      for (int i = p + 1; i < q - 1; i++)
+      {
+        if(braketCount<0){
+          flag=false;
+        }
+        int type = tokens[i].type;
+        if (type == '(')
+          braketCount++;
+        if (type == ')')
+          braketCount--;
+      }
+      if (flag)
+      {
+        p++;
+        q--;
+      }
     }
     for(int i=p;i<=q;i++){
       printf("current bracketCount:%d\n",braketCount);
