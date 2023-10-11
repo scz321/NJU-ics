@@ -195,7 +195,7 @@ bool make_token(char *e)
 
   //printf("执行成功一次，即将返回true\n");
   return true;
-}
+} 
 
 
 bool check_parentheses(int st,int ed);
@@ -227,10 +227,25 @@ int opLevel(int type){
     return 1;
   return -1;
 }
+void tokensPrint(int p,int q){
+  for(int i=p;i<q+1;i++){
+    int type=tokens[i].type;
+    if(type==DIGIT){
+      printf("%s",tokens[i].str);
+    }
+    else if(type==TK_EQ){
+      printf("==");
+    }
+    else{
+      printf("%c",type);
+    }
+  }
+ // printf('\n');
+}
 
 word_t eval(int p, int q) {
-  printf("  ");
-  printf("当前st:%d,ed:%d\n",p,q);
+ 
+  printf("当前st:%d,ed:%d,eval对象为:",p,q);tokensPrint(p,q);printf("返回情况：");
   if (p > q) {
     /* Bad expression */
     printf("Bad expression!!\n");
@@ -251,6 +266,7 @@ word_t eval(int p, int q) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
+    printf("判断为标准括号表达式，返回内层\n");
     return eval(p + 1, q - 1);
   }
   else {
@@ -283,7 +299,7 @@ word_t eval(int p, int q) {
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
    if(flag){
-      //printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+      printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
       return eval(p+1,q-1);
    }
     
@@ -350,24 +366,24 @@ word_t eval(int p, int q) {
     case '+':
       //printf("即将执行一次运算：%u+%u  ", val1, val2);
       ret = val1 + val2;
-      //printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
       break;
     case '-':
       //printf("即将执行一次运算：%u-%u  ", val1, val2);
       ret = val1 - val2;
-      //printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
       break;
     case '*':
       //printf("即将执行一次运算：%u*%u  ", val1, val2);
       ret = val1 * val2;
-      //printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
       break;
     case '/':
-    printf("当前除法执行情况：");
+    //printf("当前除法执行情况：");
     if(val2==0)
-      printf("!!分母为0！！\n");
-    else 
-      printf("正常执行！哈哈哈\n");
+      printf("!!分母为0！！");
+    //else 
+      //printf("正常执行！哈哈哈\n");
      // printf("即将执行一次运算：%u/%u  ", val1, val2);
       ret = val1 / val2;
       printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
@@ -376,7 +392,7 @@ word_t eval(int p, int q) {
       assert(0);
       break;
     }
-    printf("即将返回递归求值结果:%d\n",ret);
+    //printf("即将返回递归求值结果:%d\n",ret);
     return ret;//return即使是int型的ret还是会被转换成word_t
   }
 }
