@@ -341,9 +341,9 @@ word_t eval(int p, int q) {
     //确实，我目前已经确保了input中不会出现除数为0的情况，但是我似乎没有确保expr里面不会出现这种情况
     switch (mainOp.type) {
       case '+': printf("即将执行一次运算：%u+%u  ",val1,val2);ret= val1 + val2;printf("执行了一次运算：%u+%u=%u",val1,val2,ret);break;
-      case '-': printf("即将执行一次运算：%u+%u  ",val1,val2);ret= val1 - val2;printf("执行了一次运算：%u-%u=%u",val1,val2,ret);break;
-      case '*': printf("即将执行一次运算：%u+%u  ",val1,val2);ret= val1 * val2;printf("执行了一次运算：%u*%u=%u",val1,val2,ret);break;
-      case '/': printf("即将执行一次运算：%u+%u  ",val1,val2);ret= val1 / val2;printf("执行了一次运算：%u/%u=%u",val1,val2,ret);break;
+      case '-': printf("即将执行一次运算：%u-%u  ",val1,val2);ret= val1 - val2;printf("执行了一次运算：%u-%u=%u",val1,val2,ret);break;
+      case '*': printf("即将执行一次运算：%u*%u  ",val1,val2);ret= val1 * val2;printf("执行了一次运算：%u*%u=%u",val1,val2,ret);break;
+      case '/': printf("即将执行一次运算：%u/%u  ",val1,val2);ret= val1 / val2;printf("执行了一次运算：%u/%u=%u",val1,val2,ret);break;
       default: assert(0);break;
     }
     printf("即将返回递归求值结果:%d\n",ret);
