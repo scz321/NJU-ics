@@ -164,6 +164,7 @@ void sdb_mainloop() {
       perror("Unable to open file");
       return ;
   }
+   printf("==================\n");
    char line[1000];  // 适当选择行缓冲区大小
     uint32_t uintVal;
     char strVal[100];
