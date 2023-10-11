@@ -171,7 +171,7 @@ bool make_token(char *e)
       }
     }
 
-    printf("当前字符串：%s\n",e);
+    //printf("当前字符串：%s\n",e);
     printf("i:%d,NR_REGEX:%d\n",i,NR_REGEX);
     if (i == NR_REGEX)
     {
@@ -181,17 +181,17 @@ bool make_token(char *e)
   }
   
   
-  printf("=================\n");
-  for (int i = 0; i < nr_token; i++)
-  {
-    printf("make_token函数执行完成，输出tokesStr:%s\n", tokens[i].str);
-  }
-  printf("=================\n");
+  // printf("=================\n");
+  // for (int i = 0; i < nr_token; i++)
+  // {
+  //   printf("make_token函数执行完成，输出tokesStr:%s\n", tokens[i].str);
+  // }
+  // printf("=================\n");
   // while(getchar()!='\n'){
   //   printf("输入回车继续执行");
   // }
 
-  printf("执行成功一次，即将返回true\n");
+  //printf("执行成功一次，即将返回true\n");
   return true;
 }
 bool check_parentheses(int st,int ed);
@@ -225,6 +225,7 @@ int opLevel(int type){
 }
 
 word_t eval(int p, int q) {
+  printf("  ");
   printf("当st:%d,ed:%d\n",p,q);
   if (p > q) {
     /* Bad expression */
@@ -239,7 +240,7 @@ word_t eval(int p, int q) {
     word_t ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
-    printf("  即将返回DIGIT:%d\n",ret);
+    printf("即将返回DIGIT:%d\n",ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
@@ -292,10 +293,10 @@ word_t eval(int p, int q) {
     }
     //如果*/也没有
     if(opPosition==-1){
-      printf("  当前表达式没有运算符，不合理！\n");
+      printf("当前表达式没有运算符，不合理！\n");
       return  -1;
     }
-    printf("  当前mainOp位置:%d\n",opPosition);
+    printf("当前mainOp位置:%d\n",opPosition);
 
     struct token mainOp=tokens[opPosition];
 
@@ -311,7 +312,7 @@ word_t eval(int p, int q) {
       case '/': ret= val1 / val2;break;
       default: assert(0);break;
     }
-    printf("  即将返回递归求值结果:%d\n",ret);
+    printf("即将返回递归求值结果:%d\n",ret);
     return ret;
   }
 }
