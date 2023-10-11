@@ -262,8 +262,9 @@ word_t eval(int p, int q) {
     //由于当前情况下仍然有可能出现整个式子被括号包围的情况，这会导致整个表达式识别不出来mainOp的后果，因此需要作预处理
     //执行这种消除的前提是，第一个括号和最后一个括号是匹配的括号！
     int P=p,Q=q;
-    while(tokens[P].type=='('&&tokens[Q].type==')'){
-      bool flag = true;
+    bool flag = false;//一开始，我是不认为你是是被匹配性括号包围的
+    if(tokens[P].type=='('&&tokens[Q].type==')'){
+      flag=true;//但是目前看来，你是有很大可能被包围的
       for (int i = p + 1; i < q - 1; i++)
       {        
         int type = tokens[i].type;
@@ -272,20 +273,18 @@ word_t eval(int p, int q) {
         if (type == ')')
           braketCount--;
         if(braketCount<0){
-          flag=false;
+          flag=false;//但是现在看来，你还是不配
           break;
         }
       }
-      if (flag)
-      {
-        p++;
-        q--;
-      }
-      P++;
-      Q--;
+      
     }
+     //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
+   if(flag)
+      return eval(p+1,q-1);
     
-    printf("当前实际进行遍历的p:%d,当前q:%d\n",p,q);
+    
+    //printf("当前实际进行遍历的p:%d,当前q:%d\n",p,q);
     
     braketCount=0;
     for(int i=p;i<=q;i++){
