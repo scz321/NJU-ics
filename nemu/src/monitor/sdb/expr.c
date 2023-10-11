@@ -261,7 +261,8 @@ word_t eval(int p, int q) {
 
     //由于当前情况下仍然有可能出现整个式子被括号包围的情况，这会导致整个表达式识别不出来mainOp的后果，因此需要作预处理
     //执行这种消除的前提是，第一个括号和最后一个括号是匹配的括号！
-    while(tokens[p].type=='('&&tokens[q].type==')'){
+    int P=p,Q=q;
+    while(tokens[P].type=='('&&tokens[Q].type==')'){
       bool flag = true;
       for (int i = p + 1; i < q - 1; i++)
       {
@@ -281,6 +282,8 @@ word_t eval(int p, int q) {
         p++;
         q--;
       }
+      P++;
+      Q--;
     }
     printf("当前p:%d,当前q:%d\n",p,q);
     braketCount=0;
