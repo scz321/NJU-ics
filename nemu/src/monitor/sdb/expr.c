@@ -282,8 +282,11 @@ word_t eval(int p, int q) {
       }     
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
-   if(flag)
-      return eval(p+1,q-1);
+   if(flag){
+      printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+            return eval(p+1,q-1);
+
+   }
     
     
     //printf("当前实际进行遍历的p:%d,当前q:%d\n",p,q);
