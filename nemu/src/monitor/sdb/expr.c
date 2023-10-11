@@ -270,6 +270,9 @@ word_t eval(int p, int q) {
         break;
       }
     }
+
+    printf("寻找乘除之前的braketCount:%d\n",braketCount);
+
     //如果不存在+-运算：
     if (opPosition == -1)
     {
