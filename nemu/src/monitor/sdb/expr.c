@@ -265,7 +265,7 @@ word_t eval(int p, int q) {
       q--;
     }
     for(int i=p;i<=q;i++){
-      //printf("current bracketCount:%d\n",braketCount);
+      printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
       int type=tokens[i].type;
       if(type=='(')
