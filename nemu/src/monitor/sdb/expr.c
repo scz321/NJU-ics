@@ -257,6 +257,7 @@ word_t eval(int p, int q) {
     int braketCount=0;//记录当前的左括号、右括号出现的数量差距，当且仅当lPunm=RPnum=0时，该位置有可能成为mainOp
 
     for(int i=p;i<q;i++){
+      printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
       int type=tokens[i].type;
       if(type=='(')
@@ -274,6 +275,8 @@ word_t eval(int p, int q) {
       for (int i = p; i < q; i++)
       {
         int type = tokens[i].type;
+        printf("current bracketCount:%d\n",braketCount);
+
         assert(opPosition>=0);
         if(type=='(')
         braketCount++;
