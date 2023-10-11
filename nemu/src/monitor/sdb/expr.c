@@ -199,6 +199,8 @@ word_t eval(int p, int q);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
+    bool test=make_token(e);
+    printf("make_token的执行结果是:%d\n",test);
     *success = false;
     return 0;
   }
