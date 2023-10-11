@@ -283,13 +283,16 @@ word_t eval(int p, int q) {
     word_t val1 = eval(p, opPosition - 1);
     word_t val2 = eval(opPosition + 1, q);
 
+    int ret=-1;
     switch (mainOp.type) {
-      case '+': return val1 + val2;
-      case '-': return val1 - val2;
-      case '*': return val1 * val2;
-      case '/': return val1 / val2;
+      case '+': ret= val1 + val2;
+      case '-': ret= val1 - val2;
+      case '*': ret= val1 * val2;
+      case '/': ret= val1 / val2;
       default: assert(0);
     }
+    printf("  即将返回递归求值结果:%d\n",ret);
+    return ret;
   }
 }
 
