@@ -20,9 +20,18 @@
 #include <assert.h>
 #include <string.h>
 
+
+
+uint32_t choose(uint32_t n) {
+    if (n == 0)
+        return 0;
+    return rand() % n;
+}
+
 // this should be enough
-static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+#define BUF_LEN 65536
+static char buf[BUF_LEN] = {};
+static char code_buf[BUF_LEN + 128] = {}; // a little larger than `buf`
 //前者存储格式化的表达式，后者存储生成的格式化的c代码
 
 static char *code_format =
@@ -33,7 +42,53 @@ static char *code_format =
 "  return 0; "
 "}";
 
+static int bufPtr=0;
+//static bool validFlag=true;
+static void gen(char c){
+  buf[bufPtr++]=c;
+}
+static void gen_num(){
+  
+  buf[bufPtr++]=choose(9)-0+'1';//保证第一个数字存在且非零
+  while(1){
+    if(choose(2)==0)
+      break;
+    // int temp=choose(10);
+    // if(temp==0&&bufPtr-1>=0&&buf[bufPtr-1]=='/'){
+    //   validFlag=false;
+    // }
+    
+    buf[bufPtr++]=choose(10)-0+'0';
+  }
+  
+}
+static void gen_rand_op(){
+  
+
+  switch(choose(4)){
+    case 0:
+      buf[bufPtr++]='+';break;
+    case 1:
+      buf[bufPtr++]='-';break;
+    case 2:
+      buf[bufPtr++]='*';break;
+    case 3:
+      buf[bufPtr++]='/';break;
+    default:
+      printf("产生了未知的随机数！\n");break;
+  }
+
+}
+
+
 static void gen_rand_expr() {
+  //数组越界问题的简单处理方式hhh
+  if(bufPtr>BUF_LEN-10000){
+    gen_num();
+    return;
+  }
+
+
   switch (choose(3)) {
     case 0: gen_num(); break;
     case 1: gen('('); gen_rand_expr(); gen(')'); break;
@@ -46,13 +101,20 @@ int main(int argc, char *argv[]) {
   int seed = time(0);
   srand(seed);
   int loop = 1;
+  //第二个参数将会被识别为循环次数（默认为1）
   if (argc > 1) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    //validFlag=true;
+    bufPtr=0;//一开始把这一个忘记了，然后一直以为是
+    
     gen_rand_expr();
-
+    buf[bufPtr]='\0';
+    // if(validFlag==flase){
+    //   buf[0]='\0';
+    // }
     sprintf(code_buf, code_format, buf);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
@@ -60,14 +122,24 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
-    if (ret != 0) continue;
-
+    //下面这种做法是必要的！这是为了防止编译过程中的输出警告信息混在在我们预期的input文件中
+    int ret = system("gcc /tmp/.code.c -o /tmp/.expr -Werror 2> /tmp/.error.txt");
+    if (ret != 0) {
+      i--;
+      continue;
+    }
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    int result;
-    ret = fscanf(fp, "%d", &result);
+    uint32_t result;
+    //这里涉及到对除数为0 的处理,ret==-1说明读取结果失败，在本实验背景下仅对应于除数为0
+    ret = fscanf(fp, "%u", &result);
+    if(ret==-1){
+      i--;
+      continue;
+    }
+
+
     pclose(fp);
 
     printf("%u %s\n", result, buf);

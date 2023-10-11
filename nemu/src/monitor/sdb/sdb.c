@@ -155,6 +155,41 @@ void sdb_mainloop() {
     return;
   }
 
+  //测试表达式求值start
+  FILE *file = fopen("input", "r");  // 打开文本文件
+
+  if (file == NULL) {
+      perror("Unable to open file");
+      return ;
+  }
+   char line[1000];  // 适当选择行缓冲区大小
+    uint32_t uintVal;
+    char strVal[100];
+
+    while (fgets(line, sizeof(line), file) != NULL) {
+        // 解析每行数据
+        if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
+            // 处理解析得到的数据
+            printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+            bool t;
+            uint32_t ret=expr(strVal,&t);
+            if(t==false){
+              printf("expr函数执行失败！\n");
+            }
+            if(ret==uintVal){
+              printf("expr()执行结果：%u,测试成功！\n",ret);
+            }
+            else{
+                printf("expr()执行结果：%u,测试失败！\n",ret);
+            }
+        } else {
+            printf("Invalid format in line: %s\n", line);
+        }
+    }
+
+  //测试表达式求值end
+
+
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
