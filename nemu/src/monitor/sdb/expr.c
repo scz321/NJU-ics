@@ -283,9 +283,8 @@ word_t eval(int p, int q) {
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
    if(flag){
-      printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
-            return eval(p+1,q-1);
-
+      //printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+      return eval(p+1,q-1);
    }
     
     
@@ -344,12 +343,38 @@ word_t eval(int p, int q) {
 
     word_t ret=-1;
     //确实，我目前已经确保了input中不会出现除数为0的情况，但是我似乎没有确保expr里面不会出现这种情况
-    switch (mainOp.type) {
-      case '+': printf("即将执行一次运算：%u+%u  ",val1,val2);ret= val1 + val2;printf("执行了一次运算：%u+%u=%u",val1,val2,ret);break;
-      case '-': printf("即将执行一次运算：%u-%u  ",val1,val2);ret= val1 - val2;printf("执行了一次运算：%u-%u=%u",val1,val2,ret);break;
-      case '*': printf("即将执行一次运算：%u*%u  ",val1,val2);ret= val1 * val2;printf("执行了一次运算：%u*%u=%u",val1,val2,ret);break;
-      case '/': printf("即将执行一次运算：%u/%u  ",val1,val2);ret= val1 / val2;printf("执行了一次运算：%u/%u=%u",val1,val2,ret);break;
-      default: assert(0);break;
+  
+  //if(opPosition>=)
+    switch (mainOp.type)
+    {
+    case '+':
+      //printf("即将执行一次运算：%u+%u  ", val1, val2);
+      ret = val1 + val2;
+      //printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
+      break;
+    case '-':
+      //printf("即将执行一次运算：%u-%u  ", val1, val2);
+      ret = val1 - val2;
+      //printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
+      break;
+    case '*':
+      //printf("即将执行一次运算：%u*%u  ", val1, val2);
+      ret = val1 * val2;
+      //printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
+      break;
+    case '/':
+    printf("当前除法执行情况：");
+    if(val2==0)
+      printf("!!分母为0！！\n");
+    else 
+      printf("正常执行！哈哈哈\n");
+     // printf("即将执行一次运算：%u/%u  ", val1, val2);
+      ret = val1 / val2;
+      printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
+      break;
+    default:
+      assert(0);
+      break;
     }
     printf("即将返回递归求值结果:%d\n",ret);
     return ret;//return即使是int型的ret还是会被转换成word_t
