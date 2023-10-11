@@ -79,7 +79,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[100] __attribute__((used)) = {};
+static Token tokens[1000] __attribute__((used)) = {};
 
 static int nr_token __attribute__((used))  = 0;
 
@@ -106,8 +106,8 @@ bool make_token(char *e)
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        //Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+         //   i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
 
@@ -173,7 +173,7 @@ bool make_token(char *e)
     }
 
     //printf("当前字符串：%s\n",e);
-    printf("i:%d,NR_REGEX:%d\n",i,NR_REGEX);
+   // printf("i:%d,NR_REGEX:%d\n",i,NR_REGEX);
     if (i == NR_REGEX)
     {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
