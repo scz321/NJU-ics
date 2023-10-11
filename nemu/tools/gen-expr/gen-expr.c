@@ -23,6 +23,8 @@
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+//前者存储格式化的表达式，后者存储生成的格式化的c代码
+
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -32,7 +34,12 @@ static char *code_format =
 "}";
 
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  switch (choose(3)) {
+    case 0: gen_num(); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+  }
+  //buf[0] = '\0';
 }
 
 int main(int argc, char *argv[]) {

@@ -38,6 +38,7 @@ static struct rule {
    */
 
   //这里可能需要注意先后顺序
+  //事实证明这里没有必要关注先后顺序
   //另一个注意点是注意元字符和语言转义字符的混合使用，不要混淆
 
   {" +", TK_NOTYPE},    // spaces
@@ -330,6 +331,7 @@ bool check_parentheses(int st,int ed){
   }
   st++;
  
+ //下面的代码纯属画蛇添足，加了之后反而是错误的
   // while(st!=ed){
   //   if(tokens[st].type=='('||tokens[st].type==')')
   //     return false;
