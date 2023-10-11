@@ -167,6 +167,7 @@ bool make_token(char *e)
           break;
         }
 
+
         // 这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
         break;
       }
@@ -276,8 +277,7 @@ word_t eval(int p, int q) {
           flag=false;//但是现在看来，你还是不配
           break;
         }
-      }
-      
+      }     
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
    if(flag)
@@ -338,11 +338,12 @@ word_t eval(int p, int q) {
     word_t val2 = eval(opPosition + 1, q);
 
     int ret=-1;
+    //确实，我目前已经确保了input中不会出现除数为0的情况，但是我似乎没有确保expr里面不会出现这种情况
     switch (mainOp.type) {
-      case '+': ret= val1 + val2;break;
-      case '-': ret= val1 - val2;break;
-      case '*': ret= val1 * val2;break;
-      case '/': ret= val1 / val2;break;
+      case '+': ret= val1 + val2;printf("执行了一次运算：%u+%u=%u",val1,val2,ret);break;
+      case '-': ret= val1 - val2;printf("执行了一次运算：%u-%u=%u",val1,val2,ret);break;
+      case '*': ret= val1 * val2;printf("执行了一次运算：%u*%u=%u",val1,val2,ret);break;
+      case '/': ret= val1 / val2;printf("执行了一次运算：%u/%u=%u",val1,val2,ret);break;
       default: assert(0);break;
     }
     printf("即将返回递归求值结果:%d\n",ret);
