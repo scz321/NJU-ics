@@ -250,10 +250,20 @@ word_t eval(int p, int q) {
   }
   else {
     //首先需要寻找主运算符,逻辑不难，从左到右找优先级最低的运算符
-    int opPosition=-1;
+    //debug发现，这是不合理的！没有考虑括号对mainOp位置的影响！
+    //首先，我们知道，当前的else情况下不可能出现一个(expr)形式的表达式，因此可以放心大胆地skip括号内的
+    //所有运算符
+    int opPosition=-1;//主运算符位置
+    int braketCount=0;//记录当前的左括号、右括号出现的数量差距，当且仅当lPunm=RPnum=0时，该位置有可能成为mainOp
+
     for(int i=p;i<q;i++){
+      assert(braketCount>=0);
       int type=tokens[i].type;
-      if(opLevel(type)==0){
+      if(type=='(')
+        braketCount++;
+      if(type==')')
+        braketCount--;
+      if(braketCount==0&&opLevel(type)==0){
         opPosition=i;
         break;
       }
@@ -264,7 +274,13 @@ word_t eval(int p, int q) {
       for (int i = p; i < q; i++)
       {
         int type = tokens[i].type;
-        if (opLevel(type) == 1)
+        assert(opPosition>=0);
+        if(type=='(')
+        braketCount++;
+        if(type==')')
+          braketCount--;
+        
+        if (braketCount==0&&opLevel(type) == 1)
         {
           opPosition = i;
           break;
