@@ -179,6 +179,8 @@ bool make_token(char *e)
       return false;
     }
   }
+  
+  
   printf("=================\n");
   for (int i = 0; i < nr_token; i++)
   {
@@ -189,6 +191,7 @@ bool make_token(char *e)
   //   printf("输入回车继续执行");
   // }
 
+  printf("执行成功一次，即将返回true\n");
   return true;
 }
 bool check_parentheses(int st,int ed);
