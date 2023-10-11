@@ -337,5 +337,14 @@ bool check_parentheses(int st,int ed){
   //     return false;
   //   st++;
   // }
+
+  //10.11后记，上面的代码不是画蛇添足，比如对于下面的测试用例：
+  //((9285))/(7-((1-(3)+44*2)*254))*99+((7620))
+  //之前之所以想删除它，是为什么来着？
+    while(st!=ed){
+    if(tokens[st].type=='('||tokens[st].type==')')
+      return false;
+    st++;
+  }
   return true;
 }
