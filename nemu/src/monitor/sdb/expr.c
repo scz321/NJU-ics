@@ -238,6 +238,7 @@ word_t eval(int p, int q) {
     word_t ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
+    printf("  即将返回DIGIT:%d\n",ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
@@ -271,9 +272,10 @@ word_t eval(int p, int q) {
     }
     //如果*/也没有
     if(opPosition==-1){
-      printf("当前表达式没有运算符，不合理！\n");
+      printf("  当前表达式没有运算符，不合理！\n");
       return  -1;
     }
+    printf("  当前mainOp位置:%d\n",opPosition);
 
     struct token mainOp=tokens[opPosition];
 
