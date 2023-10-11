@@ -283,7 +283,8 @@ word_t eval(int p, int q) {
         braketCount++;
         if(type==')')
           braketCount--;
-        
+        printf("当前type:%c\n",type);
+        printf("当前braketCount:%d\n",braketCount);
         if (braketCount==0&&opLevel(type) == 1)
         {
           opPosition = i;
