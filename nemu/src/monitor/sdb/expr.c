@@ -196,6 +196,8 @@ bool make_token(char *e)
   //printf("执行成功一次，即将返回true\n");
   return true;
 }
+
+
 bool check_parentheses(int st,int ed);
 word_t eval(int p, int q);
 
