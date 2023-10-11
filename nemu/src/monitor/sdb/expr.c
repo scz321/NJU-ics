@@ -265,14 +265,15 @@ word_t eval(int p, int q) {
       bool flag = true;
       for (int i = p + 1; i < q - 1; i++)
       {
-        if(braketCount<0){
-          flag=false;
-        }
+        
         int type = tokens[i].type;
         if (type == '(')
           braketCount++;
         if (type == ')')
           braketCount--;
+        if(braketCount<0){
+          flag=false;
+        }
       }
       if (flag)
       {
