@@ -285,10 +285,10 @@ word_t eval(int p, int q) {
       P++;
       Q--;
     }
-    printf("当前p:%d,当前q:%d\n",p,q);
+    //printf("当前p:%d,当前q:%d\n",p,q);
     braketCount=0;
     for(int i=p;i<=q;i++){
-      printf("current bracketCount:%d\n",braketCount);
+      //printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
       int type=tokens[i].type;
       if(type=='(')
