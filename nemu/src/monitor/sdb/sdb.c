@@ -156,20 +156,19 @@ void sdb_mainloop() {
   }
 
   //测试表达式求值start
-  printf("==================\n");
   FILE *file = fopen("./input.txt", "r");  // 打开文本文件
-  printf("==================\n");
 
   if (file == NULL) {
       perror("Unable to open file");
       return ;
   }
-   printf("==================\n");
    char line[1000];  // 适当选择行缓冲区大小
     uint32_t uintVal;
     char strVal[100];
-
+    int testNum=0;
+    int succesNum=0;
     while (fgets(line, sizeof(line), file) != NULL) {
+      testNum++;
         // 解析每行数据
         if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
             // 处理解析得到的数据
@@ -177,18 +176,21 @@ void sdb_mainloop() {
             bool t;
             uint32_t ret=expr(strVal,&t);
             if(t==false){
-              printf("expr函数执行失败！\n");
+              //printf("expr函数执行失败！\n");
             }
             if(ret==uintVal){
-              printf("expr()执行结果：%u,测试成功！\n",ret);
+              succesNum++;
+              //printf("expr()执行结果：%u,测试成功！\n",ret);
             }
             else{
-                printf("expr()执行结果：%u,测试失败！\n",ret);
+                //printf("expr()执行结果：%u,测试失败！\n",ret);
             }
         } else {
             printf("Invalid format in line: %s\n", line);
         }
     }
+    printf("测试用例数量：%d\n",testNum);
+    printf("测试成功数量：%d\n",succesNum);
 
   //测试表达式求值end
 
