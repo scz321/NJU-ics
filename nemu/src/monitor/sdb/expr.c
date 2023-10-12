@@ -249,7 +249,8 @@ word_t eval(int p, int q) {
   }
   if (IS_DEBUG_EXPR)
     printf("当前st:%d,ed:%d,eval对象为:", p, q);
-  tokensPrint(p, q);
+  if (IS_DEBUG_EXPR)
+    tokensPrint(p, q);
   if (IS_DEBUG_EXPR)
     printf("返回情况：");
   if (p > q) {
