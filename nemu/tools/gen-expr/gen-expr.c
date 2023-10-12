@@ -83,15 +83,19 @@ static void gen_rand_op(){
 
 static void gen_rand_expr() {
   //数组越界问题的简单处理方式hhh
-  if(bufPtr>BUF_LEN-10000){
+  if(bufPtr>10){
     gen_num();
     return;
   }
 
 
-  switch (choose(3)) {
+  //生成
+  switch (choose(6)) {
     case 0: gen_num(); break;
-    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    case 1: gen_num(); break;
+   
+    case 2: gen_num(); break;
+    case 3: gen('('); gen_rand_expr(); gen(')'); break;
     default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
   }
   //buf[0] = '\0';
@@ -110,7 +114,7 @@ int main(int argc, char *argv[]) {
     //validFlag=true;
     bufPtr=0;//一开始把这一个忘记了，然后一直以为是
     
-    gen_rand_expr();
+    gen_rand_expr(0);
     buf[bufPtr]='\0';
     // if(validFlag==flase){
     //   buf[0]='\0';
