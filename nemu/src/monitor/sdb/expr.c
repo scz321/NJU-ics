@@ -361,8 +361,8 @@ int eval(int p, int q) {
 
     struct token mainOp=tokens[opPosition];
 
-    word_t val1 = eval(p, opPosition - 1);
-    word_t val2 = eval(opPosition + 1, q);
+    int val1 = eval(p, opPosition - 1);
+    int val2 = eval(opPosition + 1, q);
 
     int ret=-1;
     //确实，我目前已经确保了input中不会出现除数为0的情况，但是我似乎没有确保expr里面不会出现这种情况
@@ -374,19 +374,19 @@ int eval(int p, int q) {
       //printf("即将执行一次运算：%u+%u  ", val1, val2);
       ret = val1 + val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u+%u=%u\n", val1, val2, ret);
+      printf("执行了一次运算：%d+%d=%d\n", val1, val2, ret);
       break;
     case '-':
       //printf("即将执行一次运算：%u-%u  ", val1, val2);
       ret = val1 - val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u-%u=%u\n", val1, val2, ret);
+      printf("执行了一次运算：%d-%d=%d\n", val1, val2, ret);
       break;
     case '*':
       //printf("即将执行一次运算：%u*%u  ", val1, val2);
       ret = val1 * val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u*%u=%u\n", val1, val2, ret);
+      printf("执行了一次运算：%d*%d=%d\n", val1, val2, ret);
       break;
     case '/':
     //printf("当前除法执行情况：");
@@ -397,7 +397,7 @@ int eval(int p, int q) {
      // printf("即将执行一次运算：%u/%u  ", val1, val2);
       ret = val1 / val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u/%u=%u\n", val1, val2, ret);
+      printf("执行了一次运算：%d/%d=%d\n", val1, val2, ret);
       break;
     default:
       assert(0);
