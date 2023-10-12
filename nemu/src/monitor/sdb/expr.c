@@ -245,10 +245,10 @@ void tokensPrint(int p,int q){
 
 word_t eval(int p, int q) {
  
-  printf("当前st:%d,ed:%d,eval对象为:",p,q);tokensPrint(p,q);printf("返回情况：");
+  //printf("当前st:%d,ed:%d,eval对象为:",p,q);tokensPrint(p,q);printf("返回情况：");
   if (p > q) {
     /* Bad expression */
-    printf("Bad expression!!\n");
+    //printf("Bad expression!!\n");
     return -1;
   }
   else if (p == q) {
@@ -259,14 +259,14 @@ word_t eval(int p, int q) {
     word_t ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
-    printf("即将返回DIGIT:%d\n",ret);
+    //printf("即将返回DIGIT:%d\n",ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    printf("判断为标准括号表达式，返回内层\n");
+    //printf("判断为标准括号表达式，返回内层\n");
     return eval(p + 1, q - 1);
   }
   else {
@@ -299,7 +299,7 @@ word_t eval(int p, int q) {
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
    if(flag){
-      printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+      //printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
       return eval(p+1,q-1);
    }
     
@@ -347,10 +347,10 @@ word_t eval(int p, int q) {
     }
     //如果*/也没有
     if(opPosition==-1){
-      printf("当前表达式没有运算符，不合理！\n");
+      //printf("当前表达式没有运算符，不合理！\n");
       return  -1;
     }
-    printf("当前mainOp位置:%d\n",opPosition);
+    //printf("当前mainOp位置:%d\n",opPosition);
 
     struct token mainOp=tokens[opPosition];
 
@@ -366,17 +366,17 @@ word_t eval(int p, int q) {
     case '+':
       //printf("即将执行一次运算：%u+%u  ", val1, val2);
       ret = val1 + val2;
-      printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
+      //printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
       break;
     case '-':
       //printf("即将执行一次运算：%u-%u  ", val1, val2);
       ret = val1 - val2;
-      printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
+      //printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
       break;
     case '*':
       //printf("即将执行一次运算：%u*%u  ", val1, val2);
       ret = val1 * val2;
-      printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
+      //printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
       break;
     case '/':
     //printf("当前除法执行情况：");
@@ -386,7 +386,7 @@ word_t eval(int p, int q) {
       //printf("正常执行！哈哈哈\n");
      // printf("即将执行一次运算：%u/%u  ", val1, val2);
       ret = val1 / val2;
-      printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
+      //printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
       break;
     default:
       assert(0);
