@@ -60,11 +60,8 @@ static void gen_num(){
     
     buf[bufPtr++]=choose(10)-0+'0';
   }
-  
 }
 static void gen_rand_op(){
-  
-
   switch(choose(4)){
     case 0:
       buf[bufPtr++]='+';break;
@@ -83,7 +80,7 @@ static void gen_rand_op(){
 
 static void gen_rand_expr() {
   //数组越界问题的简单处理方式hhh
-  if(bufPtr>10){
+  if(bufPtr>100){
     gen_num();
     return;
   }
@@ -93,7 +90,6 @@ static void gen_rand_expr() {
   switch (choose(6)) {
     case 0: gen_num(); break;
     case 1: gen_num(); break;
-   
     case 2: gen_num(); break;
     case 3: gen('('); gen_rand_expr(); gen(')'); break;
     default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
