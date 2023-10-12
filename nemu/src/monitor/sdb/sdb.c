@@ -193,6 +193,7 @@ void sdb_mainloop() {
               printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
               IS_DEBUG_EXPR=true;
               expr(strVal,&t);
+              IS_DEBUG_EXPR=false;
               printf("expr()执行结果：%u,测试失败！\n", ret);
               printf("=====================================\n");
 
