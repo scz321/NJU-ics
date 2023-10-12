@@ -172,7 +172,7 @@ void sdb_mainloop() {
         // 解析每行数据
         if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
             // 处理解析得到的数据
-            printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+            //printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
             bool t;
             uint32_t ret=expr(strVal,&t);
             if(t==false){
@@ -183,6 +183,10 @@ void sdb_mainloop() {
               //printf("expr()执行结果：%u,测试成功！\n",ret);
             }
             else{
+              printf("=====================================\n");
+                printf("expr()执行结果：%u,测试失败！\n",ret);
+                              printf("=====================================\n");
+
                 //printf("expr()执行结果：%u,测试失败！\n",ret);
             }
         } else {
