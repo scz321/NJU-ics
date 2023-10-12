@@ -119,9 +119,6 @@ static struct {
   {"si","执行指定数量的指令，缺省为1",cmd_si},
   {"info","打印寄存器/监视点信息",cmd_info},
   {"p","表达式求值，这里的表达式支持寄存器",cmd_p},
-
-  
-
   /* TODO: Add more commands */
 
 };
@@ -193,7 +190,7 @@ void sdb_mainloop() {
               printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
               IS_DEBUG_EXPR=true;
               expr(strVal,&t);
-              
+              IS_DEBUG_EXPR=false;//注意需要在合适的位置重置IS_DEBUG_EXPR为false
               printf("expr()执行结果：%u,测试失败！\n", ret);
               printf("=====================================\n");
 
@@ -202,7 +199,7 @@ void sdb_mainloop() {
         } else {
             printf("Invalid format in line: %s\n", line);
         }
-        IS_DEBUG_EXPR=false;//注意需要在合适的位置重置IS_DEBUG_EXPR为false
+        
     }
     printf("测试用例数量：%d\n",testNum);
     printf("测试成功数量：%d\n",succesNum);
