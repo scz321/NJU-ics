@@ -184,10 +184,11 @@ void sdb_mainloop() {
             }
             else{
               printf("=====================================\n");
-                printf("expr()执行结果：%u,测试失败！\n",ret);
-                              printf("=====================================\n");
+              printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+              printf("expr()执行结果：%u,测试失败！\n", ret);
+              printf("=====================================\n");
 
-                //printf("expr()执行结果：%u,测试失败！\n",ret);
+              // printf("expr()执行结果：%u,测试失败！\n",ret);
             }
         } else {
             printf("Invalid format in line: %s\n", line);
