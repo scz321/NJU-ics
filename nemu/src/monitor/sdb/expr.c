@@ -250,8 +250,8 @@ word_t eval(int p, int q) {
   if (IS_DEBUG_EXPR)
     printf("当前st:%d,ed:%d,eval对象为:", p, q);
   tokensPrint(p, q);
-   if (IS_DEBUG_EXPR)
-  printf("返回情况：");
+  if (IS_DEBUG_EXPR)
+    printf("返回情况：");
   if (p > q) {
     /* Bad expression */
     printf("Bad expression!!\n");
@@ -265,16 +265,16 @@ word_t eval(int p, int q) {
     word_t ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
-    if(IS_DEBUG_EXPR)
-    printf("即将返回DIGIT:%d\n",ret);
+    if (IS_DEBUG_EXPR)
+      printf("即将返回DIGIT:%d\n", ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    if(IS_DEBUG_EXPR)
-    printf("判断为标准括号表达式，返回内层\n");
+    if (IS_DEBUG_EXPR)
+      printf("判断为标准括号表达式，返回内层\n");
     return eval(p + 1, q - 1);
   }
   else {
@@ -398,8 +398,8 @@ word_t eval(int p, int q) {
       assert(0);
       break;
     }
-    if(IS_DEBUG_EXPR)
-    printf("即将返回递归求值结果:%d\n",ret);
+    if (IS_DEBUG_EXPR)
+      printf("即将返回递归求值结果:%d\n", ret);
     return ret;//return即使是int型的ret还是会被转换成word_t
   }
 }
