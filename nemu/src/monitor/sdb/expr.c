@@ -368,19 +368,19 @@ word_t eval(int p, int q) {
       //printf("即将执行一次运算：%u+%u  ", val1, val2);
       ret = val1 + val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u+%u=%u\n", val1, val2, ret);
       break;
     case '-':
       //printf("即将执行一次运算：%u-%u  ", val1, val2);
       ret = val1 - val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u-%u=%u\n", val1, val2, ret);
       break;
     case '*':
       //printf("即将执行一次运算：%u*%u  ", val1, val2);
       ret = val1 * val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u*%u=%u\n", val1, val2, ret);
       break;
     case '/':
     //printf("当前除法执行情况：");
@@ -391,7 +391,7 @@ word_t eval(int p, int q) {
      // printf("即将执行一次运算：%u/%u  ", val1, val2);
       ret = val1 / val2;
       if(IS_DEBUG_EXPR)
-      printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
+      printf("执行了一次运算：%u/%u=%u\n", val1, val2, ret);
       break;
     default:
       assert(0);
