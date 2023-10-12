@@ -177,7 +177,7 @@ void sdb_mainloop() {
             // 处理解析得到的数据
             //printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
             bool t;
-            uint32_t ret=expr(strVal,&t);
+            uint32_t ret=(uint32_t)(expr(strVal,&t));
             if(t==false){
               //printf("expr函数执行失败！\n");
             }

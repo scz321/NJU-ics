@@ -199,7 +199,7 @@ bool make_token(char *e)
 
 
 bool check_parentheses(int st,int ed);
-word_t eval(int p, int q);
+int eval(int p, int q);
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -243,7 +243,11 @@ void tokensPrint(int p,int q){
  // printf('\n');
 }
 extern bool IS_DEBUG_EXPR;
-word_t eval(int p, int q) {
+
+//这里的返回值尤为重要，必须要设计这个函数的返回值为int，
+//而不能设计成uint32_t，这是为了和c语言默认的表达式计算行为保持一致
+//我们只需要在最外层的返回递归结果之后，显示进行一次类型转换即可
+int eval(int p, int q) {
   if(IS_DEBUG_EXPR){
     printf("当前是IS_DEBUG_EXPR为true，进行一次debug输出\n");
   }
@@ -263,7 +267,7 @@ word_t eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-    word_t ret=-1;
+    int ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
     if (IS_DEBUG_EXPR)
@@ -360,7 +364,7 @@ word_t eval(int p, int q) {
     word_t val1 = eval(p, opPosition - 1);
     word_t val2 = eval(opPosition + 1, q);
 
-    word_t ret=-1;
+    int ret=-1;
     //确实，我目前已经确保了input中不会出现除数为0的情况，但是我似乎没有确保expr里面不会出现这种情况
   
   //if(opPosition>=)
