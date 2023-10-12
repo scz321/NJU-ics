@@ -242,13 +242,18 @@ void tokensPrint(int p,int q){
   }
  // printf('\n');
 }
-
+extern bool IS_DEBUG_EXPR;
 word_t eval(int p, int q) {
- 
-  //printf("当前st:%d,ed:%d,eval对象为:",p,q);tokensPrint(p,q);printf("返回情况：");
+  if(IS_DEBUG_EXPR){
+    printf("当前是IS_DEBUG_EXPR为true，进行一次debug输出\n");
+  }
+  if (IS_DEBUG_EXPR)
+    printf("当前st:%d,ed:%d,eval对象为:", p, q);
+  tokensPrint(p, q);
+  printf("返回情况：");
   if (p > q) {
     /* Bad expression */
-    //printf("Bad expression!!\n");
+    printf("Bad expression!!\n");
     return -1;
   }
   else if (p == q) {
@@ -259,14 +264,16 @@ word_t eval(int p, int q) {
     word_t ret=-1;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
     ret=(word_t)strtoul(tokens[p].str,&endptr,10);
-    //printf("即将返回DIGIT:%d\n",ret);
+    if(IS_DEBUG_EXPR)
+    printf("即将返回DIGIT:%d\n",ret);
     return ret;
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
      * If that is the case, just throw away the parentheses.
      */
-    //printf("判断为标准括号表达式，返回内层\n");
+    if(IS_DEBUG_EXPR)
+    printf("判断为标准括号表达式，返回内层\n");
     return eval(p + 1, q - 1);
   }
   else {
@@ -298,17 +305,15 @@ word_t eval(int p, int q) {
       }     
     }
      //如果这里发生了匹配性消除，就直接return eval(p-1,q+1)即可
-   if(flag){
-      //printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
-      return eval(p+1,q-1);
-   }
-    
-    
-    //printf("当前实际进行遍历的p:%d,当前q:%d\n",p,q);
-    
+    if (flag)
+    {
+      if (IS_DEBUG_EXPR)
+        printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+      return eval(p + 1, q - 1);
+    }
+
     braketCount=0;
     for(int i=p;i<=q;i++){
-      //printf("current bracketCount:%d\n",braketCount);
       assert(braketCount>=0);
       int type=tokens[i].type;
       if(type=='(')
@@ -317,11 +322,9 @@ word_t eval(int p, int q) {
         braketCount--;
       if(braketCount==0&&opLevel(type)==0){
         opPosition=i;
-        //break;
       }
     }
 
-    //printf("寻找乘除之前的braketCount:%d\n",braketCount);
 
     //如果不存在+-运算：
     if (opPosition == -1)
@@ -329,15 +332,12 @@ word_t eval(int p, int q) {
       for (int i = p; i <= q; i++)
       {
         int type = tokens[i].type;
-       // printf("current bracketCount:%d\n",braketCount);
 
         assert(braketCount>=0);
         if(type=='(')
         braketCount++;
         if(type==')')
           braketCount--;
-        // printf("当前type:%c\n",type);
-        // printf("当前braketCount:%d\n",braketCount);
         if (braketCount==0&&opLevel(type) == 1)
         {
           opPosition = i;
@@ -347,10 +347,11 @@ word_t eval(int p, int q) {
     }
     //如果*/也没有
     if(opPosition==-1){
-      //printf("当前表达式没有运算符，不合理！\n");
+      printf("当前表达式没有运算符，不合理！\n");
       return  -1;
     }
-    //printf("当前mainOp位置:%d\n",opPosition);
+    if(IS_DEBUG_EXPR)
+    printf("当前mainOp位置:%d\n",opPosition);
 
     struct token mainOp=tokens[opPosition];
 
@@ -366,17 +367,20 @@ word_t eval(int p, int q) {
     case '+':
       //printf("即将执行一次运算：%u+%u  ", val1, val2);
       ret = val1 + val2;
-      //printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
+      if(IS_DEBUG_EXPR)
+      printf("执行了一次运算：%u+%u=%u", val1, val2, ret);
       break;
     case '-':
       //printf("即将执行一次运算：%u-%u  ", val1, val2);
       ret = val1 - val2;
-      //printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
+      if(IS_DEBUG_EXPR)
+      printf("执行了一次运算：%u-%u=%u", val1, val2, ret);
       break;
     case '*':
       //printf("即将执行一次运算：%u*%u  ", val1, val2);
       ret = val1 * val2;
-      //printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
+      if(IS_DEBUG_EXPR)
+      printf("执行了一次运算：%u*%u=%u", val1, val2, ret);
       break;
     case '/':
     //printf("当前除法执行情况：");
@@ -386,13 +390,15 @@ word_t eval(int p, int q) {
       //printf("正常执行！哈哈哈\n");
      // printf("即将执行一次运算：%u/%u  ", val1, val2);
       ret = val1 / val2;
-      //printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
+      if(IS_DEBUG_EXPR)
+      printf("执行了一次运算：%u/%u=%u", val1, val2, ret);
       break;
     default:
       assert(0);
       break;
     }
-    //printf("即将返回递归求值结果:%d\n",ret);
+    if(IS_DEBUG_EXPR)
+    printf("即将返回递归求值结果:%d\n",ret);
     return ret;//return即使是int型的ret还是会被转换成word_t
   }
 }

@@ -19,6 +19,12 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+//控制是否debug输出的static全局变量
+static bool IS_DEBUG_EXPR=false;
+
+//end
+
+
 
 static int is_batch_mode = false;
 
@@ -185,6 +191,8 @@ void sdb_mainloop() {
             else{
               printf("=====================================\n");
               printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+              IS_DEBUG_EXPR=true;
+              expr(strVal,&t);
               printf("expr()执行结果：%u,测试失败！\n", ret);
               printf("=====================================\n");
 
