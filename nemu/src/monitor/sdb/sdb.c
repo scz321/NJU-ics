@@ -258,7 +258,7 @@ void sdb_mainloop() {
     }
     //这部分用于支持watchpoint的实现：
         //遍历head链表中的所有wp，输出preVal发生变化的wp并且更新之
-    changeDisplay();
+    //changeDisplay();不应该在这里执行检查
 
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }

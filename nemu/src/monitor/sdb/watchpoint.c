@@ -94,6 +94,7 @@ void changeDisplay(){
     {
       printf("监视点NO.%d的expr值发生了变化：\n",cur->NO);
       printf("原来是:%d\t新值:%d\t\n",cur->preVal,ret);
+      nemu_state.state=NEMU_STOP;
     }
     cur=cur->next;
   }
