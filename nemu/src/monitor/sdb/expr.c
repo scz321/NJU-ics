@@ -315,7 +315,7 @@ int eval(int p, int q) {
         return *retPtr;
         break;
       case HEX_NUM:
-        ret=(word_t)strtoul(tokens[p].str+2,&endptr,16);
+        ret=(word_t)strtoul(tokens[p].str,&endptr,16);
          if (IS_DEBUG_EXPR)
           printf("即将返回HEX_NUM的处理结果:%u\n", ret);
         return ret;

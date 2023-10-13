@@ -20,7 +20,7 @@
 #include "sdb.h"
 
 //控制是否debug输出的static全局变量
-bool IS_DEBUG_EXPR=false;
+bool IS_DEBUG_EXPR=true;
 
 //end
 
@@ -159,50 +159,50 @@ void sdb_mainloop() {
   }
 
   //测试表达式求值start
-  FILE *file = fopen("./input.txt", "r");  // 打开文本文件
+  // FILE *file = fopen("./input.txt", "r");  // 打开文本文件
 
-  if (file == NULL) {
-      perror("Unable to open file");
-      return ;
-  }
-   char line[1000];  // 适当选择行缓冲区大小
-    uint32_t uintVal;
-    char strVal[100];
-    int testNum=0;
-    int succesNum=0;
-    while (fgets(line, sizeof(line), file) != NULL) {
-      testNum++;
-        // 解析每行数据
-        if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
-            // 处理解析得到的数据
-            //printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
-            bool t;
-            uint32_t ret=(uint32_t)(expr(strVal,&t));
-            if(t==false){
-              //printf("expr函数执行失败！\n");
-            }
-            if(ret==uintVal){
-              succesNum++;
-              //printf("expr()执行结果：%u,测试成功！\n",ret);
-            }
-            else{
-              printf("=====================================\n");
-              printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
-              IS_DEBUG_EXPR=true;
-              expr(strVal,&t);
-              IS_DEBUG_EXPR=false;//注意需要在合适的位置重置IS_DEBUG_EXPR为false
-              printf("expr()执行结果：%u,测试失败！\n", ret);
-              printf("=====================================\n");
+  // if (file == NULL) {
+  //     perror("Unable to open file");
+  //     return ;
+  // }
+  //  char line[1000];  // 适当选择行缓冲区大小
+  //   uint32_t uintVal;
+  //   char strVal[100];
+  //   int testNum=0;
+  //   int succesNum=0;
+  //   while (fgets(line, sizeof(line), file) != NULL) {
+  //     testNum++;
+  //       // 解析每行数据
+  //       if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
+  //           // 处理解析得到的数据
+  //           //printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+  //           bool t;
+  //           uint32_t ret=(uint32_t)(expr(strVal,&t));
+  //           if(t==false){
+  //             //printf("expr函数执行失败！\n");
+  //           }
+  //           if(ret==uintVal){
+  //             succesNum++;
+  //             //printf("expr()执行结果：%u,测试成功！\n",ret);
+  //           }
+  //           else{
+  //             printf("=====================================\n");
+  //             printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
+  //             IS_DEBUG_EXPR=true;
+  //             expr(strVal,&t);
+  //             IS_DEBUG_EXPR=false;//注意需要在合适的位置重置IS_DEBUG_EXPR为false
+  //             printf("expr()执行结果：%u,测试失败！\n", ret);
+  //             printf("=====================================\n");
 
-              // printf("expr()执行结果：%u,测试失败！\n",ret);
-            }
-        } else {
-            printf("Invalid format in line: %s\n", line);
-        }
+  //             // printf("expr()执行结果：%u,测试失败！\n",ret);
+  //           }
+  //       } else {
+  //           printf("Invalid format in line: %s\n", line);
+  //       }
         
-    }
-    printf("测试用例数量：%d\n",testNum);
-    printf("测试成功数量：%d\n",succesNum);
+  //   }
+  //   printf("测试用例数量：%d\n",testNum);
+  //   printf("测试成功数量：%d\n",succesNum);
 
   //测试表达式求值end
 
