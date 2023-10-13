@@ -52,10 +52,13 @@ static struct rule {
   {"\\)",')'},
 
   //新增几种tokenType
-  {"0x[0-9A-Fa-f]+",HEX_NUM},//十六进制数
+  {"0(x|X)[0-9A-Fa-f]+",HEX_NUM},//十六进制数
   {"$[0-9a-z]+",REG},
   
+  
 };
+
+
 
 #define NR_REGEX ARRLEN(rules)
 
