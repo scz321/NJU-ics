@@ -22,7 +22,7 @@
 
 enum {
   //默认情况下，后一个枚举值会比前一个枚举值大1，这里设计成256开始也是有讲究的
-  TK_NOTYPE = 256, TK_EQ,DIGIT
+  TK_NOTYPE = 256, TK_EQ,DIGIT,HEX_NUM,REG,DEREF,
 
   /* TODO: Add more token types */
 
@@ -45,11 +45,15 @@ static struct rule {
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
   {"-",'-'},        
-  {"\\*",'*'},
+  {"\\*",'*'},//这里实际识别出*之后的type确定需要进行分类讨论（乘法or解引用），这里默认为解引用
   {"/",'/'},
   {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT},
   {"\\(",'('},
-  {"\\)",')'}
+  {"\\)",')'},
+
+  //新增几种tokenType
+  {"0x[0-9A-Fa-f]+",HEX_NUM},//十六进制数
+  {"$[0-9a-z]+",REG},
   
 };
 
@@ -135,7 +139,14 @@ bool make_token(char *e)
           nr_token++;
           break;
         case '*':
-          tokens[nr_token].type = '*';
+          //这里需要区分乘法和解引用
+          if(nr_token-1>=0&&tokens[nr_token-1].type==TK_NOTYPE){
+            tokens[nr_token].type=DEREF;
+          }
+          else
+          {
+            tokens[nr_token].type = '*';
+          }
           nr_token++;
           break;
         case '/':
@@ -162,10 +173,17 @@ bool make_token(char *e)
         case ')':
           tokens[nr_token++].type = ')';
           break;
+        case HEX_NUM:
+          tokens[nr_token++].type=HEX_NUM;
+          break;
+        case REG:
+          tokens[nr_token++].type=REG;
+          break;
         default:
           printf("意外的tokenType！\n");
           break;
         }
+
 
 
         // 这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
@@ -267,12 +285,47 @@ int eval(int p, int q) {
      * For now this token should be a number.
      * Return the value of the number.
      */
-    int ret=-1;
+    //现在，这里不仅仅只有num一种case了，需要分情况讨论
+    int type=tokens[p].type;
     char *endptr; // 用于存储转换后剩余的未处理部分的地址
-    ret=(word_t)strtoul(tokens[p].str,&endptr,10);
-    if (IS_DEBUG_EXPR)
-      printf("即将返回DIGIT:%d\n", ret);
-    return ret;
+    word_t ret=-1;
+
+    switch(type){
+      case DIGIT:
+        ret=(word_t)strtoul(tokens[p].str,&endptr,10);
+        if (IS_DEBUG_EXPR)
+          printf("即将返回DIGIT:%d\n", ret);
+        return ret;
+        break;
+      case DEREF:
+        word_t* retPtr=NULL;
+       
+        //注意我们默认解析的地址是16进制格式
+        retPtr=(word_t *)strtoul(tokens[p].str+1,&endptr,10);//一个小小的+1，就能轻松实现需求，这就是c语言
+        if (IS_DEBUG_EXPR && retPtr != NULL)
+        {
+          printf("即将返回*retPtr:%u\n", *retPtr);
+        }
+        else
+        {
+          printf("retPtr is NULL\n");
+        }
+        return *retPtr;
+        break;
+      case HEX_NUM:
+        ret=(word_t)strtoul(tokens[p].str+2,&endptr,16);
+         if (IS_DEBUG_EXPR)
+          printf("即将返回HEX_NUM的处理结果:%u\n", ret);
+        return ret;
+        break;
+      case REG:
+        bool success=false;
+        ret=isa_reg_str2val(tokens[p].str+1,&success);
+        if(!success){
+          printf("isa_reg_str2val函数执行失败!\n");
+        }
+        return ret;
+    }
   }
   else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -314,7 +367,7 @@ int eval(int p, int q) {
     if (flag)
     {
       if (IS_DEBUG_EXPR)
-        printf("发生了匹配性括号消除,执行      return eval(p+1,q-1);\n");
+        printf("发生了匹配性括号消除,执行 return eval(p+1,q-1);\n");
       return eval(p + 1, q - 1);
     }
 
@@ -407,6 +460,7 @@ int eval(int p, int q) {
       printf("即将返回递归求值结果:%d\n", ret);
     return ret;//return即使是int型的ret还是会被转换成word_t
   }
+  return -1;
 }
 
 bool check_parentheses(int st,int ed){

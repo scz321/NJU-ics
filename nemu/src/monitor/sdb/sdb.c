@@ -100,7 +100,7 @@ static int cmd_p(char *args){
   if(ret==false){
     printf("make_token执行失败！\n");
   }
-  printf("expr计算结果：%d\n",expr_ret);
+  printf("expr计算结果：%u\n",expr_ret);
   return 0;
 }
 
