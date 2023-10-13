@@ -96,6 +96,7 @@ void changeDisplay(){
       printf("原来是:%d\t新值:%d\t\n",cur->preVal,ret);
       nemu_state.state=NEMU_STOP;
     }
+    cur->preVal=ret;
     cur=cur->next;
   }
 }
