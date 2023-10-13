@@ -19,6 +19,8 @@
 #include <readline/history.h>
 #include "sdb.h"
 
+//#include <utils.h>
+
 //控制是否debug输出的static全局变量
 bool IS_DEBUG_EXPR=false;
 
@@ -104,6 +106,25 @@ static int cmd_p(char *args){
   return 0;
 }
 
+
+
+static int cmd_w(char* args)
+{
+   if(args==NULL){
+    printf("缺少表达式！\n");
+    return -1;
+  }
+  //首先，申请一个空的wp
+  WP* nWp=new_wp();
+  
+  //然后，使用args来初始化该wp
+  //nWp->condition=args;错误方式
+  strcpy(nWp->condition,args);
+  bool success;
+  nWp->preVal=expr(args,&success);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -119,6 +140,7 @@ static struct {
   {"si","执行指定数量的指令，缺省为1",cmd_si},
   {"info","打印寄存器/监视点信息",cmd_info},
   {"p","表达式求值，这里的表达式支持寄存器",cmd_p},
+  {"w","增加一个watchPoint",cmd_w},
   /* TODO: Add more commands */
 
 };
@@ -234,6 +256,10 @@ void sdb_mainloop() {
         break;
       }
     }
+    //这部分用于支持watchpoint的实现：
+        //遍历head链表中的所有wp，输出preVal发生变化的wp并且更新之
+    changeDisplay();
+
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }

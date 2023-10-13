@@ -19,5 +19,21 @@
 #include <common.h>
 
 word_t expr(char *e, bool *success);
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+  
+  char condition[32];//condition数组用来记录当前watch的表达式
 
+  /* TODO: Add more members if necessary */
+  //bool used;//记录当前wp是否被使用
+  word_t preVal;
+
+
+} WP;
+
+void watchpoint_display();
+void changeDisplay();
+void free_wp(WP *wp);
+WP* new_wp();
 #endif

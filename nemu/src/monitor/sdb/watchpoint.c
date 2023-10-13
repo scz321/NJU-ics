@@ -17,16 +17,9 @@
 
 #define NR_WP 32
 
-typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
-  //新增数组，用来存储与观察点关联的条件
-  char condition[32];
 
-  /* TODO: Add more members if necessary */
 
-} WP;
-
+//变量被声明为static，那么他们在程序的整个声明周期内都可以被访问
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
@@ -35,20 +28,75 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+    wp_pool[i].preVal=0;
+    //wp_pool[i].used=false;
   }
 
   head = NULL;
   free_ = wp_pool;
 }
 
-// void watchpoint_display(){
-//   printf("NO.\tCondation\n");
-//   WP* cur = head;
-//   while (cur){
-//     printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->condation);
-//     cur = cur->next;
-//   }
-// }
+//add 
+WP* new_wp(){
+  //int i;
+  if(free_==NULL){
+    printf("wp数量已经达到上限！\n");
+    assert(0);
+  }
+  //头删法找到空闲列表首项
+  WP* newWp=free_;
+  free_=free_->next;
 
+  //头插法插入到head列表中
+  newWp->next=head;
+  head=newWp;
+  
+  //返回新增的头指针
+  return newWp;
+}
+
+void free_wp(WP *wp){
+  //那现在你就能体会到NO这个属性的作用了
+
+  //首先，进行删除
+  for (WP* i = head; i!=NULL&&i->next!=NULL; i=i->next)
+  {
+    if(i->next->NO==wp->NO){//注意这里的判断条件
+      i->next=i->next->next;
+      break;
+    }
+    /* code */
+  }
+  //然后，进行增加,老样子，头插法
+   wp->next=free_;
+  free_=wp;
+}
+
+
+void watchpoint_display(){
+  printf("NO.\tCondation\n");
+  WP* cur = head;
+  while (cur){
+    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->condition);
+    cur = cur->next;
+  }
+}
+
+
+void changeDisplay(){
+  WP* cur=head;
+  while(cur!=NULL){
+    bool success;
+    word_t ret=expr(cur->condition,&success);
+    if(!success)
+      printf("expr执行失败\n");
+    if(cur->preVal!=ret)
+    {
+      printf("监视点NO.%d的expr值发生了变化：\n",cur->NO);
+      printf("原来是:%d\t新值:%d\t\n",cur->preVal,ret);
+    }
+    cur=cur->next;
+  }
+}
 /* TODO: Implement the functionality of watchpoint */
 
