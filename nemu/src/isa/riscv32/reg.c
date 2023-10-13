@@ -53,7 +53,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       printf("当前的regs[i]：%s\n",regs[i]);
     }
     
-    if(regs[i]==s)
+    if(*regs[i]==*s)
     {
       *success=true;
       return cpu.gpr[i];
