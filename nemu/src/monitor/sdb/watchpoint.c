@@ -74,10 +74,10 @@ void free_wp(WP *wp){
 
 
 void watchpoint_display(){
-  printf("NO.\tCondation\n");
+  printf("NO.\tCondition\tcurrentValue\n");
   WP* cur = head;
   while (cur){
-    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\n", cur->NO, cur->condition);
+    printf("\e[1;36m%d\e[0m\t\e[0;32m%s\e[0m\t%d\n", cur->NO, cur->condition,cur->preVal);
     cur = cur->next;
   }
 }
