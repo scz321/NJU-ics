@@ -55,7 +55,7 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       printf("*regs[i]==*s的判断结果是：%d\n",*regs[i]==*s);
     }
     
-    if(*regs[i]==*s)
+    if(strcmp(s,regs[i])==0)
     {
       *success=true;
       if(IS_DEBUG_EXPR)
