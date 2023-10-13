@@ -144,6 +144,7 @@ bool make_token(char *e)
           //这里需要区分乘法和解引用
           if(nr_token-1>=0&&tokens[nr_token-1].type==TK_NOTYPE){
             tokens[nr_token].type=DEREF;
+            strncpy(tokens[nr_token].str, substr_start+1, substr_len);//注意我这里把*删除了
           }
           else
           {
@@ -176,10 +177,15 @@ bool make_token(char *e)
           tokens[nr_token++].type = ')';
           break;
         case HEX_NUM:
-          tokens[nr_token++].type=HEX_NUM;
+          tokens[nr_token].type=HEX_NUM;
+          //tokens[nr_token].str=substr_start+2;赋值会报错，但是下面的复制不会
+          strncpy(tokens[nr_token].str, substr_start+2, substr_len);//注意我这里把0x删除了
+          nr_token++;
           break;
         case REG:
-          tokens[nr_token++].type=REG;
+          tokens[nr_token].type=REG;
+          strncpy(tokens[nr_token].str, substr_start+1, substr_len);//注意我这里把$删除了
+          nr_token++;
           break;
         default:
           printf("意外的tokenType！\n");
@@ -302,8 +308,8 @@ int eval(int p, int q) {
       case DEREF:
         word_t* retPtr=NULL;
        
-        //注意我们默认解析的地址是16进制格式
-        retPtr=(word_t *)strtoul(tokens[p].str+1,&endptr,10);//一个小小的+1，就能轻松实现需求，这就是c语言
+        //注意我们默认解析的地址是10进制格式
+        retPtr=(word_t *)strtoul(tokens[p].str,&endptr,10);
         if (IS_DEBUG_EXPR && retPtr != NULL)
         {
           printf("即将返回*retPtr:%u\n", *retPtr);
@@ -316,13 +322,16 @@ int eval(int p, int q) {
         break;
       case HEX_NUM:
         ret=(word_t)strtoul(tokens[p].str,&endptr,16);
-         if (IS_DEBUG_EXPR)
+         if (IS_DEBUG_EXPR){
+          
           printf("即将返回HEX_NUM的处理结果:%u\n", ret);
+         }
+          
         return ret;
         break;
       case REG:
         bool success=false;
-        ret=isa_reg_str2val(tokens[p].str+1,&success);
+        ret=isa_reg_str2val(tokens[p].str,&success);
         if(!success){
           printf("isa_reg_str2val函数执行失败!\n");
         }
