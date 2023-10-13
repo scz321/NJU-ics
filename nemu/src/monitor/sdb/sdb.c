@@ -80,7 +80,7 @@ static int cmd_info(char *args){
     isa_reg_display();
   }
   else if(strcmp(args,"w")){
-    //watchpoint_display();
+    watchpoint_display();
   }
   else{
     printf("参数有误！\n");
@@ -141,6 +141,7 @@ static struct {
   {"info","打印寄存器/监视点信息",cmd_info},
   {"p","表达式求值，这里的表达式支持寄存器",cmd_p},
   {"w","增加一个watchPoint",cmd_w},
+  
   /* TODO: Add more commands */
 
 };
