@@ -47,14 +47,13 @@ static struct rule {
   {"-",'-'},        
   {"\\*",'*'},//这里实际识别出*之后的type确定需要进行分类讨论（乘法or解引用），这里默认为解引用
   {"/",'/'},
+  {"0(x|X)[0-9A-Fa-f]+",HEX_NUM},//十六进制数,注意这个规则必须放在DIGIT规则的前面
   {"(0|1|2|3|4|5|6|7|8|9)+",DIGIT},
   {"\\(",'('},
   {"\\)",')'},
 
   //新增几种tokenType
-  //{"0(x|X)[0-9A-Fa-f]+",HEX_NUM},//十六进制数
-  {"0(x|X)(0|1|2|3|4|5|6|7|8|9)+",HEX_NUM},//十六进制数
-
+  
   {"$[0-9a-z]+",REG},
   
 };
@@ -105,7 +104,6 @@ bool make_token(char *e)
   while (e[position] != '\0')
   {
     /* Try all rules one by one. */
-
     // 这里的re存储编译后的正则表达式结果，包括了含rules在内的诸多信息
     for (i = 0; i < NR_REGEX; i++)
     {
@@ -208,7 +206,7 @@ bool make_token(char *e)
   // printf("=================\n");
   // for (int i = 0; i < nr_token; i++)
   // {
-  //   printf("make_token函数执行完成，输出tokesStr:%s\n", tokens[i].str);
+  //   printf("make_token函数执行完成，输出toexprkesStr:%s\n", tokens[i].str);
   // }
   // printf("=================\n");
   // while(getchar()!='\n'){
