@@ -51,6 +51,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     //这里我突然理解了为什么在编译原理中要为每一个常量单独设定一个存储空间了--不然你完全没办法进行下面的比较
     if(IS_DEBUG_EXPR){
       printf("当前的regs[i]：%s\n",regs[i]);
+      printf("当前isa_reg_str2val的target寄存器：%s\n",s);
+      printf("*regs[i]==*s的判断结果是：%d\n",*regs[i]==*s);
     }
     
     if(*regs[i]==*s)
