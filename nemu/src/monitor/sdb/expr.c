@@ -54,7 +54,7 @@ static struct rule {
 
   //新增几种tokenType
   
-  {"$[0-9a-z]+",REG},
+  {"\\$[0-9a-z]+",REG},
   
 };
 
