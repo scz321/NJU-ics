@@ -39,13 +39,20 @@ void isa_reg_display() {
     printf("\n");
   }
 }
-
+extern bool IS_DEBUG_EXPR;
 word_t isa_reg_str2val(const char *s, bool *success) {
-
+  if(IS_DEBUG_EXPR){
+    printf("当前isa_reg_str2val的target寄存器：%s\n",s);
+  }
   //难绷，原来你是提供且仅提供了一个接口
   int length = ARRLEN(regs);
 
   for(int i=0;i<length;i++){
+    //这里我突然理解了为什么在编译原理中要为每一个常量单独设定一个存储空间了--不然你完全没办法进行下面的比较
+    if(IS_DEBUG_EXPR){
+      printf("当前的regs[i]：%s\n",regs[i]);
+    }
+    
     if(regs[i]==s)
     {
       *success=true;

@@ -332,7 +332,7 @@ int eval(int p, int q) {
       case REG:
         bool success=false;
         if(IS_DEBUG_EXPR)
-          printf("tokens[p].str:%s",tokens[p].str);
+          printf("tokens[p].str:%s\n",tokens[p].str);
         ret=isa_reg_str2val(tokens[p].str,&success);
         if(!success){
           printf("isa_reg_str2val函数执行失败!\n");
