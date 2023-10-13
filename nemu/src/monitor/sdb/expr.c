@@ -45,6 +45,7 @@ static struct rule {
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
   {"-",'-'},        
+  {"\\*(0|1|2|3|4|5|6|7|8|9)+",DEREF},//仅仅支持对十进制进行解引用
   {"\\*",'*'},//这里实际识别出*之后的type确定需要进行分类讨论（乘法or解引用），这里默认为解引用
   {"/",'/'},
   {"0(x|X)[0-9A-Fa-f]+",HEX_NUM},//十六进制数,注意这个规则必须放在DIGIT规则的前面
@@ -140,16 +141,13 @@ bool make_token(char *e)
           tokens[nr_token].type = TK_EQ;
           nr_token++;
           break;
+        case DEREF:
+         tokens[nr_token].type=DEREF;
+          strncpy(tokens[nr_token].str, substr_start+1, substr_len);//注意我这里把*删除了
+          nr_token++;
+          break;
         case '*':
-          //这里需要区分乘法和解引用
-          if(nr_token-1>=0&&tokens[nr_token-1].type==TK_NOTYPE){
-            tokens[nr_token].type=DEREF;
-            strncpy(tokens[nr_token].str, substr_start+1, substr_len);//注意我这里把*删除了
-          }
-          else
-          {
-            tokens[nr_token].type = '*';
-          }
+          tokens[nr_token].type = '*';
           nr_token++;
           break;
         case '/':
