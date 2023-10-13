@@ -41,5 +41,17 @@ void isa_reg_display() {
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+
+  //难绷，原来你是提供且仅提供了一个接口
+  int length = ARRLEN(regs);
+
+  for(int i=0;i<length;i++){
+    if(regs[i]==s)
+    {
+      *success=true;
+      return cpu.gpr[i];
+    }
+  }
+   *success=false;
   return 0;
 }
