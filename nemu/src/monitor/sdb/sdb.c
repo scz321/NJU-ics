@@ -20,7 +20,7 @@
 #include "sdb.h"
 
 //控制是否debug输出的static全局变量
-bool IS_DEBUG_EXPR=true;
+bool IS_DEBUG_EXPR=false;
 
 //end
 
