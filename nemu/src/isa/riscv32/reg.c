@@ -56,6 +56,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     if(*regs[i]==*s)
     {
       *success=true;
+      if(IS_DEBUG_EXPR)
+        printf("cpu.gpr[i]:%u\n",cpu.gpr[i]);
       return cpu.gpr[i];
     }
   }
