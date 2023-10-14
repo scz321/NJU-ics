@@ -54,6 +54,8 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       printf("当前isa_reg_str2val的target寄存器：%s\n",s);
       printf("*regs[i]==*s的判断结果是：%d\n",*regs[i]==*s);
     }
+
+    //一般的一
     
     if(strcmp(s,regs[i])==0)
     {
