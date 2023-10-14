@@ -61,10 +61,12 @@ static int decode_exec(Decode *s) {
   INSTPAT("????????????????? ????? ????? ?????"   , inv      , N     , INV(s->pc));
   INSTPAT_END();
 
-  R(0) = 0; // reset $zero to 0
+  R(0) = 0; // reset $zero to 0，所以说，没有条指令执行完成之后，R(0)寄存器的值都会是0
 
   return 0;
 }
+
+
 
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
