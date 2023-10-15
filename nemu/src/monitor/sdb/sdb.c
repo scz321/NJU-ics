@@ -140,14 +140,17 @@ static int cmd_x(char *args){
   bool success = true;
   paddr_t base = 0x80000000;
   sscanf(bytesNum, "%d", &n);
+    if(IS_DEBUG_EXPR){
+      printf("当前的预期输出的字节数为：%d\n",n);
+
+  }
   base = expr(arg, &success);
   if (!success)
   {
     return 0;
   }
   if(IS_DEBUG_EXPR){
-      printf("当前的预期输出的字节数为：%d\n",n);
-      printf("当前的预期的地址为：%d\n",n);
+      printf("当前的预期的地址为：0x%x\n",base);
 
   }
   //arg = args + strlen(arg) + 1;
