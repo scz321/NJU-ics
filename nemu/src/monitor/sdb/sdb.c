@@ -125,6 +125,41 @@ static int cmd_w(char* args)
   return 0;
 }
 
+// static int cmd_x(char *args)
+// {
+//   int numBytes=0;
+//   if(args==NULL)
+//     numBytes=4;
+//   else if()
+// }
+extern uint8_t* guest_to_host(paddr_t paddr);
+static int cmd_x(char *args){
+  char *arg = strtok(NULL, " ");
+  int n = -1;
+  bool success = true;
+  paddr_t base = 0x80000000; 
+  sscanf(arg, "%d", &n); //对于n不支持表达式，只支持常量。
+  arg = args + strlen(arg) + 1;
+  //sscanf(arg, "%i", &base);
+  base = expr(arg, &success);
+  if (!success) {
+    return 0;
+  }
+  
+
+  for (int i = 0; i < n; ++i){
+    if (i % 4 == 0){
+      printf ("\n\e[1;36m%#x: \e[0m\t", base + i * 4);
+    }
+    for (int j = 0; j < 4; ++j){
+      uint8_t* pos = guest_to_host(base + i * 4 + j);
+      printf("%.2x ", *pos);
+    }
+    printf("\t");
+  }
+  printf("\n");
+  return 0;
+}
 static int cmd_help(char *args);
 
 static struct {
@@ -141,6 +176,7 @@ static struct {
   {"info","打印寄存器/监视点信息",cmd_info},
   {"p","表达式求值，这里的表达式支持寄存器",cmd_p},
   {"w","增加一个watchPoint",cmd_w},
+  {"x","以16进制输出指定地址的指定字节数量的内存信息，默认为4bytes",cmd_x},
   
   /* TODO: Add more commands */
 
