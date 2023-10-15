@@ -39,9 +39,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
   switch (type) {
-    case TYPE_I: src1R();          immI(); break;
-    case TYPE_U:                   immU(); break;
-    case TYPE_S: src1R(); src2R(); immS(); break;
+    case TYPE_I: src1R();          immI(); printf("Itype\tImm:0x%x\t\tsrc1:0x%x\t\n",*imm,*src1);break;
+    case TYPE_U:                   immU(); printf("Utype\tImm:0x%x\t\t\n",*imm); break;
+    case TYPE_S: src1R(); src2R(); immS(); printf("Stype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
   }
 }
 
