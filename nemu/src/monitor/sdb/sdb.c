@@ -134,8 +134,15 @@ static int cmd_w(char* args)
 // }
  extern uint8_t* guest_to_host(paddr_t paddr);
 static int cmd_x(char *args){
+
+  if(IS_DEBUG_EXPR)
+    printf("=======cmd_x  start=============\n");
   char *arg = strtok(args," ");//我们默认输入一个参数第一个参数为起始地址，第二个参数为字节数量,默认为4
+   if(IS_DEBUG_EXPR)
+    printf("=======t1=============\n");
   char *bytesNum=strtok(NULL," \n");
+   if(IS_DEBUG_EXPR)
+    printf("=======t2=============\n");
   int n = 4;
   bool success = true;
   paddr_t base = 0x80000000;
