@@ -96,7 +96,7 @@ static int decode_exec(Decode *s) {
 
   //这里直接借用Utype似乎就可以取代所谓的Jtype
   INSTPAT("??????? ????? ????? ??? ????? 11011 11","jal"   ,  U,imm=sign_extend_20bit(imm);\
-  R(rd)=s->snpc;s->dnpc=s->pc+imm;printf("扩展后的imm:%u\n计算后的dnpc：%u\n",imm,s->dnpc););
+  R(rd)=s->snpc;s->dnpc=s->pc+imm;printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n",imm,s->dnpc););
   
   //类似于li，这里ret是jalr的一个特例
   INSTPAT("0000000 00000 00001 000 00000 11001 11","ret"    ,I  ,s->pc=src1+0;);
