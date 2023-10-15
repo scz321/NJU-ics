@@ -22,7 +22,7 @@
 //#include <utils.h>
 
 //控制是否debug输出的static全局变量
-bool IS_DEBUG_EXPR=false;
+bool IS_DEBUG_EXPR=true;
 
 //end
 
@@ -133,40 +133,15 @@ static int cmd_w(char* args)
 //   else if()
 // }
  extern uint8_t* guest_to_host(paddr_t paddr);
-// static int cmd_x(char *args){
-//   char *arg = strtok(args, " ");
-//   int n = -1;
-//   bool success = true;
-//   paddr_t base = 0x80000000; 
-//   sscanf(arg, "%x", &n); //这里我们默认按照16进制读取地址，注意输入时不要包含0x
-//   //arg = args + strlen(arg) + 1;
-//   //sscanf(arg, "%i", &base);
-//   base = expr(arg, &success);
-//   if (!success) {
-//     return 0;
-//   }
-  
-
-//   for (int i = 0; i < n; ++i){
-//     if (i % 4 == 0){
-//       printf ("\n\e[1;36m%#x: \e[0m\t", base + i * 4);
-//     }
-//     for (int j = 0; j < 4; ++j){
-//       uint8_t* pos = guest_to_host(base + i * 4 + j);
-//       printf("%.2x ", *pos);
-//     }
-//     printf("\t");
-//   }
-//   printf("\n");
-//   return 0;
-// }
 static int cmd_x(char *args){
-  char *arg = strtok(NULL, " ");
+  char *arg = args;//我们默认只输入一个参数
   int n = -1;
   bool success = true;
   paddr_t base = 0x80000000; 
-  sscanf(arg, "%d", &n); //对于n不支持表达式，只支持常量。
-  arg = args + strlen(arg) + 1;
+  sscanf(arg, "%x", &n); //这里我们默认按照16进制读取地址，注意输入时不要包含0x
+  if(IS_DEBUG_EXPR)
+    printf("当前的地址为：0x%x\n",n);
+  //arg = args + strlen(arg) + 1;
   //sscanf(arg, "%i", &base);
   base = expr(arg, &success);
   if (!success) {
@@ -187,6 +162,7 @@ static int cmd_x(char *args){
   printf("\n");
   return 0;
 }
+
 
 
 static int cmd_help(char *args);
