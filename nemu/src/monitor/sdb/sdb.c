@@ -22,7 +22,7 @@
 //#include <utils.h>
 
 //控制是否debug输出的static全局变量
-bool IS_DEBUG_EXPR=true;
+bool IS_DEBUG_EXPR=false;
 
 //end
 
@@ -167,11 +167,12 @@ static int cmd_x(char *args){
   //sscanf(arg, "%i", &base);
 
   
-
-  for (int i = 0; i < n; ++i){
-    if (i % 4 == 0){
+  int lines=n/4;
+  if(lines==0){
+    printf("cmd_至少要求输出4个字节！\n");
+  }
+  for (int i = 0; i < lines; ++i){
       printf ("\n\e[1;36m%#x: \e[0m\t", base + i * 4);
-    }
     for (int j = 0; j < 4; ++j){
       uint8_t* pos = guest_to_host(base + i * 4 + j);
       printf("%.2x ", *pos);
