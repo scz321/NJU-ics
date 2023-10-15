@@ -142,15 +142,18 @@ static int cmd_x(char *args){
     printf("=======t1=============\n");
   char *bytesNum=strtok(NULL," \n");
    if(IS_DEBUG_EXPR)
-    printf("=======t2=============\n");
-  int n = 4;
-  bool success = true;
-  paddr_t base = 0x80000000;
-  sscanf(bytesNum, "%d", &n);
-    if(IS_DEBUG_EXPR){
-      printf("当前的预期输出的字节数为：%d\n",n);
-
-  }
+     printf("=======t2=============\n");
+   int n = 4;
+   bool success = true;
+   paddr_t base = 0x80000000;
+   if (IS_DEBUG_EXPR)
+     printf("bytesNum:%s\n", bytesNum);
+   if (bytesNum != NULL)
+     sscanf(bytesNum, "%d", &n);
+   if (IS_DEBUG_EXPR)
+   {
+     printf("当前的预期输出的字节数为：%d\n", n);
+   }
   base = expr(arg, &success);
   if (!success)
   {
