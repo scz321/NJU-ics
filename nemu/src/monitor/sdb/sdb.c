@@ -134,12 +134,12 @@ static int cmd_w(char* args)
 // }
 extern uint8_t* guest_to_host(paddr_t paddr);
 static int cmd_x(char *args){
-  char *arg = strtok(NULL, " ");
+  char *arg = strtok(args, " ");
   int n = -1;
   bool success = true;
   paddr_t base = 0x80000000; 
-  sscanf(arg, "%d", &n); //对于n不支持表达式，只支持常量。
-  arg = args + strlen(arg) + 1;
+  sscanf(arg, "%x", &n); //这里我们默认按照16进制读取地址，注意输入时不要包含0x
+  //arg = args + strlen(arg) + 1;
   //sscanf(arg, "%i", &base);
   base = expr(arg, &success);
   if (!success) {
