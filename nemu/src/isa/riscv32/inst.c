@@ -23,7 +23,7 @@
 #define Mw vaddr_write
 
 enum {
-  TYPE_I, TYPE_U, TYPE_S,
+  TYPE_I, TYPE_U, TYPE_S,TYPE_B,
   TYPE_N, // none
 };
 
@@ -32,6 +32,11 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
+//新增
+#define immB() do { *imm = (SEXT((BITS(i, 31, 31) << 12) | \
+                                   (BITS(i, 7, 7) << 11) | \
+                                   (BITS(i, 30, 25) << 5) | \
+                                   (BITS(i, 11, 8) << 1), 12)); } while(0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -42,6 +47,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_I: src1R();          immI(); printf("Itype\tImm:0x%x\t\tsrc1:0x%x\t\n",*imm,*src1);break;
     case TYPE_U:                   immU(); printf("Utype\tImm:0x%x\t\t\n",*imm); break;
     case TYPE_S: src1R(); src2R(); immS(); printf("Stype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
+    //新增
+    case TYPE_B: src1R(); src2R(); immB(); printf("Btype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
   }
 }
 
@@ -71,7 +78,6 @@ static int decode_exec(Decode *s) {
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
 }
-
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", "lui"    , U, R(rd) = imm);
@@ -108,15 +114,9 @@ static int decode_exec(Decode *s) {
     R(rd) = s->snpc;                   // 保存返回地址
     s->dnpc = s->pc + imm;             // 计算跳转地址
     printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
+
+  
 );
-
-
-
-
-
-
-
-
 
   //类似于li，这里ret是jalr的一个特例
   INSTPAT("0000000 00000 00001 000 00000 11001 11","ret"    ,I  ,s->dnpc=src1+0;);
@@ -126,6 +126,20 @@ static int decode_exec(Decode *s) {
   //sw
   //INSTPAT("??????? ????? ????? 010 ????? 01000 11",sw    ,S,);
 
+//branch 家族
+      //beqz，x2寄存器设置位0寄存器
+ INSTPAT("??????? 00000 ????? 000 ????? 11000 11","beqz"  ,B  ,
+    if(src1==src2){
+      s->dnpc=s->pc+imm;
+    };
+ );//你总不能在这里面再用if吧hhh，那有点搞了  //呃呃，事实证明确实是要用if哈哈哈
+    
+  INSTPAT("??????? ????? ????? 000 ????? 11000 11","beq",B  ,
+    if(src1==src2){
+      s->dnpc=s->pc+imm;
+    };);
+
+    
 
   INSTPAT_END();
   
