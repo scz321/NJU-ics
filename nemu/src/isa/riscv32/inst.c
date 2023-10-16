@@ -23,7 +23,7 @@
 #define Mw vaddr_write
 
 enum {
-  TYPE_I, TYPE_U, TYPE_S,TYPE_B,
+  TYPE_I, TYPE_U, TYPE_S,TYPE_B,TYPE_R,
   TYPE_N, // none
 };
 
@@ -37,6 +37,7 @@ enum {
                                    (BITS(i, 7, 7) << 11) | \
                                    (BITS(i, 30, 25) << 5) | \
                                    (BITS(i, 11, 8) << 1), 12)); } while(0)
+#define IS_DEBUG_DECODE true
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -44,11 +45,12 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
   switch (type) {
-    case TYPE_I: src1R();          immI(); printf("Itype\tImm:0x%x\t\tsrc1:0x%x\t\n",*imm,*src1);break;
-    case TYPE_U:                   immU(); printf("Utype\tImm:0x%x\t\t\n",*imm); break;
-    case TYPE_S: src1R(); src2R(); immS(); printf("Stype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
+    case TYPE_I: src1R();          immI(); if(IS_DEBUG_DECODE) printf("Itype\tImm:0x%x\t\tsrc1:0x%x\t\n",*imm,*src1);break;
+    case TYPE_U:                   immU(); if(IS_DEBUG_DECODE) printf("Utype\tImm:0x%x\t\t\n",*imm); break;
+    case TYPE_S: src1R(); src2R(); immS(); if(IS_DEBUG_DECODE) printf("Stype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
     //新增
-    case TYPE_B: src1R(); src2R(); immB(); printf("Btype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
+    case TYPE_B: src1R(); src2R(); immB(); if(IS_DEBUG_DECODE) printf("Btype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
+    case TYPE_R: src1R(); src2R();        if(IS_DEBUG_DECODE) printf("Rtype\tImm:NULL\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*src1,*src2);break;
   }
 }
 
@@ -65,7 +67,7 @@ static word_t sign_extend_20bit(word_t imm20) {
     }
     return imm20;
 }
-#define IS_DEBUG_DECODE true
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -139,7 +141,11 @@ static int decode_exec(Decode *s) {
       s->dnpc=s->pc+imm;
     };);
 
-    
+
+//R type
+        //sltu
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,src1<src2?(R(rd)=1):(R(rd)=0););
+
 
   INSTPAT_END();
   
