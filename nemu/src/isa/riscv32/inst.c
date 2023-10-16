@@ -141,7 +141,6 @@ static int decode_exec(Decode *s) {
       s->dnpc=s->pc+imm;
     };);
 
-
 //R type
         //sltu
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,src1<src2?(R(rd)=1):(R(rd)=0););
