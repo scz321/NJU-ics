@@ -37,7 +37,7 @@ enum {
                                    (BITS(i, 7, 7) << 11) | \
                                    (BITS(i, 30, 25) << 5) | \
                                    (BITS(i, 11, 8) << 1), 12)); } while(0)
-#define IS_DEBUG_DECODE true
+#define IS_DEBUG_DECODE false
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -169,7 +169,7 @@ static int decode_exec(Decode *s) {
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
-  printf("当前指令:%u\n",s->isa.inst.val);
+  printf("当前指令:%x\n",s->isa.inst.val);
   INSTPAT_END();
   
   R(0) = 0; // reset $zero to 0
