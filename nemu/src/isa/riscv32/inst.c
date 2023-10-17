@@ -167,6 +167,9 @@ static int decode_exec(Decode *s) {
 //or
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11","or",  S, R(rd)=src1|src2;);
 
+//如果都不匹配，输出当前的指令信息，便于指令系统的扩展
+  printf("没有与当前指令匹配的rule，请考虑新增！\n");
+  printf("当前指令:%u\n",s->isa.inst.val);
   INSTPAT_END();
   
   R(0) = 0; // reset $zero to 0
