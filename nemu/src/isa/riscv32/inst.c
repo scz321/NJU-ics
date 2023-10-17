@@ -82,7 +82,7 @@ void printBinary(uint32_t value) {
     {
       printf("%c", binary[i]);
     }
-    printf("\t");
+    printf("\t\t");
     for (; i < 12; i++)
     {
       printf("%c", binary[i]);
