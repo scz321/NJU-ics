@@ -67,7 +67,18 @@ static word_t sign_extend_20bit(word_t imm20) {
     }
     return imm20;
 }
+//辅助函数
+void printBinary(uint32_t value) {
+    char binary[33];
+    binary[32] = '\0';  // Null-terminate the string
 
+    for(int i = 31; i >= 0; i--) {
+        binary[i] = (value & 1) ? '1' : '0';
+        value >>= 1;
+    }
+
+    printf("当前指令: %s\n", binary);
+}
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -169,7 +180,7 @@ static int decode_exec(Decode *s) {
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
-  printf("当前指令:%x\n",s->isa.inst.val);
+  printBinary(s->isa.inst.val);
   INSTPAT_END();
   
   R(0) = 0; // reset $zero to 0
