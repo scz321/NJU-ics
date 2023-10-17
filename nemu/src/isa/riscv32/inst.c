@@ -146,6 +146,11 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,src1<src2?(R(rd)=1):(R(rd)=0););
 
 
+  //sltiu扩展指令--beqz
+  INSTPAT("0000000 00001 ????? 011 ????? 00100 11","beqz", I, if(src1<imm){R(rd)=1;}else{R(rd)=0;} );
+  //sltiu 我们src1和imm定义的就是uint32型，所以这里直接比较即可
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11","sltiu", I, if(src1<imm){R(rd)=1;}else{R(rd)=0;} );
+
   INSTPAT_END();
   
   R(0) = 0; // reset $zero to 0
