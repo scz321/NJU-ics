@@ -76,8 +76,37 @@ void printBinary(uint32_t value) {
         binary[i] = (value & 1) ? '1' : '0';
         value >>= 1;
     }
+    printf("imm[31-25]\trs2\trs1\tfunct\trd\topcode\t\n");
+    int i=0;
+    for (; i < 7; i++)
+    {
+      printf("%c", binary[i]);
+    }
+    printf("\t");
+    for (; i < 12; i++)
+    {
+      printf("%c", binary[i]);
+    }
+    printf("\t");
 
-    printf("当前指令: %s\n", binary);
+    for (; i < 17; i++)
+    {
+      printf("%c", binary[i]);
+    }
+    printf("\t");
+    for (; i < 20; i++)
+      printf("%c", binary[i]);
+    printf("\t");
+
+    for (; i < 25; i++)
+      printf("%c", binary[i]);
+    printf("\t");
+
+    for (; i < 32; i++)
+      printf("%c", binary[i]);
+    printf("\n");
+
+    //  printf("当前指令: %s\n", binary);
 }
 static int decode_exec(Decode *s) {
   int rd = 0;
