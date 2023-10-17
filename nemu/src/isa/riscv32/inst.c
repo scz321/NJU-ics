@@ -143,7 +143,7 @@ static int decode_exec(Decode *s) {
 
 //R type
         //sltu
-  INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,R(rd) = (src1 < src2) ? 1 : 0;);
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,printf("(src1 < src2) ? 1 : 0:%d",(src1 < src2) ? 1 : 0);R(rd) = (src1 < src2) ? 1 : 0;);
 
 
   //sltiu扩展指令--seqz
