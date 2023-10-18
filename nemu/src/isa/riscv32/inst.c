@@ -309,6 +309,13 @@ static int decode_exec(Decode *s) {
   });
   //mul-R
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11","mul",   R,R(rd)=src1*src2;);
+
+
+//rem-R，测试用例你真是什么冷门指令都有啊
+  INSTPAT("0000001 ????? ????? 110 ????? 01100 11","rem", R, R(rd)=src1%src2;);
+
+
+
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
   printBinary(s->isa.inst.val);
