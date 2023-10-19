@@ -30,6 +30,11 @@ bool IS_DEBUG_EXPR=false;
 
 static int is_batch_mode = false;
 
+#ifdef __ENABLE_B_OPTION
+  is_batch_mode=true;
+#endif
+
+
 void init_regex();
 void init_wp_pool();
 
