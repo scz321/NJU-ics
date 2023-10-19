@@ -14,6 +14,7 @@
 #**************************************************************************************/
 
 # Sanity check
+#健壮性检查，检查NEMU_HOME 变量是否被正确设置为 NEMU 仓库的根目录
 ifeq ($(wildcard $(NEMU_HOME)/src/nemu-main.c),)
   $(error NEMU_HOME=$(NEMU_HOME) is not a NEMU repo)
 endif
@@ -22,6 +23,7 @@ endif
 -include $(NEMU_HOME)/include/config/auto.conf
 -include $(NEMU_HOME)/include/config/auto.conf.cmd
 
+##它用来去除参数中的双引号
 remove_quote = $(patsubst "%",%,$(1))
 
 # Extract variabls from menuconfig
