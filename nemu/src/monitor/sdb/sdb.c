@@ -31,6 +31,7 @@ bool IS_DEBUG_EXPR=false;
 static int is_batch_mode = false;
 
 #ifdef __ENABLE_B_OPTION
+  printf("__ENABLE_B_OPTION is defined!!\n");
   is_batch_mode=true;
 #endif
 
