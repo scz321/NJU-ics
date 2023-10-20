@@ -247,7 +247,7 @@ void sdb_mainloop() {
 #else
   printf("__ENABLE_B_OPTION is not defined!!\n");
 #endif
-  is_batch_mode=true;
+  //is_batch_mode=true;
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
