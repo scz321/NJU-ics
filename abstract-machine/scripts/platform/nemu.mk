@@ -20,7 +20,7 @@ FLAG_1 = BATCH_MODE_SET_FLAG
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
 
-#CFLAGS += -D__ENABLE_B_OPTION
+CFLAGS += -D__ENABLE_B_OPTION
 .PHONY: $(AM_HOME)/am/src/platform/nemu/trm.c
 
 image: $(IMAGE).elf
