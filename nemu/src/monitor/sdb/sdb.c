@@ -240,6 +240,13 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
+
+#ifdef __ENABLE_B_OPTION
+  printf("__ENABLE_B_OPTION is defined!!\n");
+  is_batch_mode = true;
+#else
+  printf("__ENABLE_B_OPTION is not defined!!\n");
+#endif
   if (is_batch_mode) {
     cmd_c(NULL);
     return;

@@ -21,12 +21,6 @@ void engine_start();
 int is_exit_status_bad();
 
 int main(int argc, char *argv[]) {
-#ifdef __ENABLE_B_OPTION
-  printf("__ENABLE_B_OPTION is defined!!\n");
-  is_batch_mode=true;
-#else
-  printf("__ENABLE_B_OPTION is not defined!!\n");
-#endif
 
 
   /* Initialize the monitor. */
