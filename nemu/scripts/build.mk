@@ -26,7 +26,7 @@ CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
 ifdef BATCH_MODE_FLAG
-	CFLAGS +=-D__ENABLE_B_OPTION
+CFLAGS +=-D__ENABLE_B_OPTION
 endif
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
