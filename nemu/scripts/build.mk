@@ -26,6 +26,7 @@ CFLAGS  := -O2 -MMD -Wall -Werror $(INCLUDES) $(CFLAGS)
 LDFLAGS := -O2 $(LDFLAGS)
 
 ifdef BATCH_MODE_FLAG
+$(shell, echo "CFLAGS +=-D__ENABLE_B_OPTION将会被执行")
 CFLAGS +=-D__ENABLE_B_OPTION
 endif
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
