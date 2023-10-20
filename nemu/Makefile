@@ -54,6 +54,7 @@ LDFLAGS += $(CFLAGS_BUILD)
 ifeq ($(FLAG_1),BATCH_MODE_SET_FLAG)
 #@echo "FLAG_1 is BATCH_MODE_SET_FLAG"
 CFLAGS += -D__ENABLE_B_OPTION
+CFLAGS_BUILD += -D__ENABLE_B_OPTION
 endif
 
 # Include rules for menuconfig
