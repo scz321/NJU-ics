@@ -86,7 +86,7 @@ inline IringBuf initIringBuf(){
 	return ret;
 };
 //在执行之前，初始化iringbuf
-IringBuf iring_buf;
+extern IringBuf iring_buf;
 
 
 

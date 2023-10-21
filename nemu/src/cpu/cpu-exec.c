@@ -31,6 +31,10 @@ uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
+//add 
+IringBuf iring_buf;
+//end
+
 void device_update();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
@@ -74,6 +78,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += space_len;
 #define IS_DEBUG_IRING true
 //add
+
 	addNode(&newNode,&iring_buf);
 	if(IS_DEBUG_IRING)
 	{
@@ -99,6 +104,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 
 static void execute(uint64_t n) {
   Decode s;
+  
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
