@@ -59,15 +59,70 @@ void init_mem() {
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
+//add
+extern mRingNode new_mring_node;
+extern mRingArr mring_arr;
+#define IS_DEBUG_M_TRACE true
+//end
+
+
 word_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
-  IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
-  out_of_bound(addr);
-  return 0;
+	new_mring_node.read=true;
+	new_mring_node.addr=addr;
+	new_mring_node.len=len;
+	mRingArrAdd(&mring_arr,new_mring_node);
+	if(IS_DEBUG_M_TRACE){
+		mRingArrPrint(&mring_arr);
+	}
+	if (likely(in_pmem(addr))) return pmem_read(addr, len);
+	IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
+	out_of_bound(addr);
+	return 0;
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-  IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
-  out_of_bound(addr);
+	new_mring_node.write=true;
+	new_mring_node.addr=addr;
+	new_mring_node.len=len;
+	mRingArrAdd(&mring_arr,new_mring_node);
+	
+	if(IS_DEBUG_M_TRACE){
+		mRingArrPrint(&mring_arr);
+	}
+	
+	if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+	IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
+	out_of_bound(addr);
+}
+
+
+
+ void mRingArrAdd(mRingArr* arr,mRingNode newNode){
+	if(arr->ed+1>M_RING_ARR_MAX) assert(0);
+	arr->mring_arr[arr->ed+1]=newNode;
+	arr->len++;
+	arr->ed++;
+	if(arr->len>arr->maxLen){
+		arr->st++;
+	}
+}
+
+ void mRingArrPrint(mRingArr* arr){
+	for(int i=arr->st;i<arr->ed+1;i++){
+		mRingNode temp=arr->mring_arr[i];
+		if(temp.read==1){
+			printf("read:\t");
+		}
+		if(temp.write==1){
+			printf("write:\t");
+		}
+		printf("paddr:0x%08x\tlen:%d\n",temp.addr,temp.len);
+	}
+	return;
+}
+ void mRingArrInit(mRingArr* arr){
+	arr->ed=0;
+	arr->st=0;
+	arr->len=0;
+	arr->maxLen=12;
 }

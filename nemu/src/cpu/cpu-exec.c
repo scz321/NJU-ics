@@ -17,6 +17,9 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+//add
+#include <memory/paddr.h>
+//end
 extern void changeDisplay();
 
 /* The assembly code of instructions executed is only output to the screen
@@ -33,6 +36,8 @@ static bool g_print_step = false;
 
 //add 
 IringBuf iring_buf;
+mRingArr mring_arr;
+mRingNode new_mring_node;
 //end
 
 void device_update();
@@ -51,16 +56,22 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
 }
 
+
 static void exec_once(Decode *s, vaddr_t pc) {
-  s->pc = pc;
-  s->snpc = pc;
-  //add
-  IringNode newNode;
+	s->pc = pc;
+	s->snpc = pc;
+	//add
+	IringNode newNode;
 	newNode.inst=s->isa.inst.val;
 	newNode.pc=s->pc;
 	//end
-  isa_exec_once(s);
-  cpu.pc = s->dnpc;
+	new_mring_node.read=false;
+	new_mring_node.write=false;
+	//add
+	
+
+	isa_exec_once(s);
+	cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
@@ -110,8 +121,13 @@ static void execute(uint64_t n) {
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) {
-		printf("发生错误，下面输出发生错误前的12条指令:\n");
+		printf("出现了运行中断/执行结束\n下面输出终止时的指令trace信息:\n");
 		IringBufprint(iring_buf);
+
+		if(new_mring_node.read==true||new_mring_node.write==true){
+			printf("下面输出终止时的访存trace信息:\n");
+			mRingArrPrint(&mring_arr);
+		}
 		break;
 	}
     IFDEF(CONFIG_DEVICE, device_update());
@@ -128,7 +144,7 @@ static void statistic() {
 }
 
 void assert_fail_msg() {
-  isa_reg_display();
+  isa_reg_display();//乐，原来你也要用这个api，怪不得给我声明好了
   statistic();
 }
 

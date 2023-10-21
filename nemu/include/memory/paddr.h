@@ -35,4 +35,28 @@ word_t paddr_read(paddr_t addr, int len);
 
 void paddr_write(paddr_t addr, int len, word_t data);
 
+
+//add
+//新增一个用来存储访存信息的结构体
+typedef struct mRingNode{
+	bool read;
+	bool write;
+	paddr_t addr;
+	int len;
+	//读/写所需记录的信息相同，记录要写入和要读出的数据对于debug是没什么意义的
+}mRingNode;
+
+#define M_RING_ARR_MAX 1024//注意它和maxLen的区别
+typedef struct mRingArr
+{
+	int maxLen;
+	int len;
+	mRingNode mring_arr[M_RING_ARR_MAX];
+	int st;
+	int ed;
+}mRingArr;
+
+void mRingArrPrint(mRingArr* arr);
+void mRingArrAdd(mRingArr* arr,mRingNode newNode);
+ void mRingArrInit(mRingArr* arr);
 #endif
