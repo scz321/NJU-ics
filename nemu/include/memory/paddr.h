@@ -58,5 +58,5 @@ typedef struct mRingArr
 
 void mRingArrPrint(mRingArr* arr);
 void mRingArrAdd(mRingArr* arr,mRingNode newNode);
- void mRingArrInit(mRingArr* arr);
+void mRingArrInit(mRingArr* arr);
 #endif

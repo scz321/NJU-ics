@@ -72,6 +72,7 @@ word_t paddr_read(paddr_t addr, int len) {
 	new_mring_node.len=len;
 	mRingArrAdd(&mring_arr,new_mring_node);
 	if(IS_DEBUG_M_TRACE){
+		printf("执行了一次read\n");
 		mRingArrPrint(&mring_arr);
 	}
 	if (likely(in_pmem(addr))) return pmem_read(addr, len);
@@ -87,6 +88,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	mRingArrAdd(&mring_arr,new_mring_node);
 	
 	if(IS_DEBUG_M_TRACE){
+		printf("执行了一次write\n");
 		mRingArrPrint(&mring_arr);
 	}
 	
