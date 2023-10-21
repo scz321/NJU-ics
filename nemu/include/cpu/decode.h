@@ -12,9 +12,10 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
+#ifndef __CPU_DECODE_H__
 
 #define IringBuf_MAX_LEN 12
-#ifndef __CPU_DECODE_H__
+
 
 
 #include <isa.h>
