@@ -63,12 +63,16 @@ inline void IringBufprint(IringBuf iring_buf){
 }
 
 inline bool addNode(IringNode *newNode, IringBuf *iring_buf){
-	if(iring_buf->ed+1>1024){
+	if(iring_buf->ed+1>1024)
 		assert(0);
-	}
+
+
 	iring_buf->buf[iring_buf->ed+1]=*newNode;
 	iring_buf->ed++;
-
+	
+	if(iring_buf->ed+1>iring_buf->maxLen){
+		iring_buf->st++;
+	}
 	return true;
 }
 
@@ -76,7 +80,7 @@ inline void initIringBuf(IringBuf* iring_buf){
 	iring_buf->st=0;
 	iring_buf->ed=0;
 	iring_buf->len=0;
-	iring_buf->maxLen=1024;
+	iring_buf->maxLen=12;
 
 }
 
