@@ -106,6 +106,8 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	arr->ed++;
 	if(arr->len>arr->maxLen){
 		arr->st++;
+		arr->len--;//这就很容易忘了。。。
+		//呃呃，还是一个思维的严谨性的问题
 	}
 }
 
