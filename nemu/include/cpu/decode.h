@@ -37,77 +37,112 @@ typedef struct IringNode{
 	word_t inst;
 	struct IringNode* next;
 }IringNode;
+
+
+
+
 //add 指令环形缓冲队列
 typedef struct IringBuf{
+	// uint16_t len;
+	// uint16_t maxLen;
+	// IringNode* head;
+	// IringNode* tail;//指向最后一个有效的node
+
+	//实力有限，还是老老实实用数组实现吧
 	uint16_t len;
 	uint16_t maxLen;
-	IringNode* head;
-	IringNode* tail;//指向最后一个有效的node
+	IringNode buf[1024];
+	int st;
+	int ed;
 } IringBuf;
-
+extern IringBuf iring_buf;
 inline void IringBufprint(IringBuf iring_buf){
-printf("当前head指针：%p, 当前tail指针:%p\n", (void*)iring_buf.head, (void*)iring_buf.tail);
-	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
-	//这里还是有隐患，当buf满了之后，第一个可就不再是dummy了！
-	//呃呃，不过这其实不算是隐患，因为它本来就不在预期的len范围之内
-
-	for(int i=0;i<iring_buf.len;i++){
-		if(cur==NULL) assert(0);
-		printf("%08x:\t%08x\n",cur->pc,cur->inst);
-		cur=cur->next;
-	};
+	for(int i=iring_buf.st;i<iring_buf.ed+1;i++){
+		printf("%08x:\t%08x\n",iring_buf.buf[i].pc,iring_buf.buf[i].inst);
+	}
 }
-inline bool addNode(IringNode *newNode, IringBuf *iring_buf)
-{
-			printf("=================================start=====================\n");
 
-	printf("执行前：\n");
-	IringBufprint(*iring_buf);
-
-	printf("new nodePc to add:0x%08x\n", newNode->pc);
-	if (iring_buf->maxLen > iring_buf->len)
-	{
-		// 直接加到队列尾部
-		// IringNode* temp=iring_buf->tail;
-		iring_buf->tail->next = newNode;
-		// 更新其他属性
-		iring_buf->len++;
-		iring_buf->tail = newNode;
+inline bool addNode(IringNode *newNode, IringBuf *iring_buf){
+	if(iring_buf->ed+1>1024){
+		assert(0);
 	}
-	else
-	{
-		// 先删除head
-		if (iring_buf->head == NULL)
-			assert(0);
-		iring_buf->head = iring_buf->head->next;
-		iring_buf->len--;
-
-		iring_buf->tail->next = newNode;
-		iring_buf->tail = newNode;
-		iring_buf->len++;
-	}
-	// IringBufprint(*iring_buf);
-	printf("执行后：\n");
-	IringBufprint(*iring_buf);
-
-		printf("=================================end=====================\n\n\n");
+	iring_buf->buf[iring_buf->ed+1]=*newNode;
+	iring_buf->ed++;
+	iring_buf->st++;
 
 	return true;
 }
 
-inline IringBuf initIringBuf()
-{
-	IringBuf ret;
-	ret.maxLen = IringBuf_MAX_LEN;
-	ret.len = 0;
-	// IringNode dummyNode;可以的，精准踩坑
-	IringNode *dummyNode = (IringNode *)malloc(sizeof(IringNode));
-	ret.head = dummyNode;
-	ret.tail = ret.head;
-	return ret;
-};
+inline void initIringBuf(IringBuf* iring_buf){
+	iring_buf->st=0;
+	iring_buf->ed=0;
+	iring_buf->len=0;
+	iring_buf->maxLen=1024;
+
+}
+
+// inline void IringBufprint(IringBuf iring_buf){
+// printf("当前head指针：%p, 当前tail指针:%p\n", (void*)iring_buf.head, (void*)iring_buf.tail);
+// 	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
+// 	//这里还是有隐患，当buf满了之后，第一个可就不再是dummy了！
+// 	//呃呃，不过这其实不算是隐患，因为它本来就不在预期的len范围之内
+
+// 	for(int i=0;i<iring_buf.len;i++){
+// 		if(cur==NULL) assert(0);
+// 		printf("%08x:\t%08x\n",cur->pc,cur->inst);
+// 		cur=cur->next;
+// 	};
+// }
+// inline bool addNode(IringNode *newNode, IringBuf *iring_buf)
+// {
+// 			printf("=================================start=====================\n");
+
+// 	printf("执行前：\n");
+// 	IringBufprint(*iring_buf);
+
+// 	printf("new nodePc to add:0x%08x\n", newNode->pc);
+// 	if (iring_buf->maxLen > iring_buf->len)
+// 	{
+// 		// 直接加到队列尾部
+// 		// IringNode* temp=iring_buf->tail;
+// 		iring_buf->tail->next = newNode;
+// 		// 更新其他属性
+// 		iring_buf->len++;
+// 		iring_buf->tail = newNode;
+// 	}
+// 	else
+// 	{
+// 		// 先删除head
+// 		if (iring_buf->head == NULL)
+// 			assert(0);
+// 		iring_buf->head = iring_buf->head->next;
+// 		iring_buf->len--;
+
+// 		iring_buf->tail->next = newNode;
+// 		iring_buf->tail = newNode;
+// 		iring_buf->len++;
+// 	}
+// 	// IringBufprint(*iring_buf);
+// 	printf("执行后：\n");
+// 	IringBufprint(*iring_buf);
+
+// 		printf("=================================end=====================\n\n\n");
+
+// 	return true;
+// }
+
+// inline IringBuf initIringBuf()
+// {
+// 	IringBuf ret;
+// 	ret.maxLen = IringBuf_MAX_LEN;
+// 	ret.len = 0;
+// 	// IringNode dummyNode;可以的，精准踩坑
+// 	IringNode *dummyNode = (IringNode *)malloc(sizeof(IringNode));
+// 	ret.head = dummyNode;
+// 	ret.tail = ret.head;
+// 	return ret;
+// };
 // 在执行之前，初始化iringbuf
-extern IringBuf iring_buf;
 
 // --- pattern matching mechanism ---
 __attribute__((always_inline))
