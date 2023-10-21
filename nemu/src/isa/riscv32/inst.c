@@ -195,6 +195,7 @@ static int decode_exec(Decode *s) {
     imm = sign_extend_20bit(imm);     // 进行符号扩展
     R(rd) = s->snpc;                   // 保存返回地址
     s->dnpc = s->pc + imm;             // 计算跳转地址
+	if(IS_DEBUG_DECODE)
     printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
 
   
