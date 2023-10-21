@@ -68,7 +68,6 @@ inline bool addNode(IringNode *newNode, IringBuf *iring_buf){
 	}
 	iring_buf->buf[iring_buf->ed+1]=*newNode;
 	iring_buf->ed++;
-	iring_buf->st++;
 
 	return true;
 }
