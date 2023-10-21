@@ -51,6 +51,7 @@ inline void IringBufprint(IringBuf iring_buf){
 	//呃呃，不过这其实不算是隐患，因为它本来就不在预期的len范围之内
 
 	for(int i=0;i<iring_buf.len;i++){
+		if(cur==NULL) assert(0);
 		printf("%08x:\t%08x\n",cur->pc,cur->inst);
 		cur=cur->next;
 	};
