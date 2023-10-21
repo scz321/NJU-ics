@@ -13,7 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 #ifndef __CPU_DECODE_H__
-
+#define __CPU_DECODE_H__
 #define IringBuf_MAX_LEN 12
 
 
@@ -46,7 +46,7 @@ typedef struct IringBuf{
 } IringBuf;
 
 
-bool addNode(IringNode* newNode,IringBuf *iring_buf){
+inline bool addNode(IringNode* newNode,IringBuf *iring_buf){
 		if(iring_buf->maxLen>iring_buf->len){
 			//直接加到队列尾部
 			iring_buf->tail->next=newNode;
@@ -67,7 +67,7 @@ bool addNode(IringNode* newNode,IringBuf *iring_buf){
 		return true;
 }
 
-void IringBufprint(IringBuf iring_buf){
+inline void IringBufprint(IringBuf iring_buf){
 	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
 	for(int i=0;i<iring_buf.len;i++){
 		printf("%08x:\t%08x\n",cur->pc,cur->inst);
@@ -75,7 +75,7 @@ void IringBufprint(IringBuf iring_buf){
 	};
 }
 
-IringBuf initIringBuf(){
+inline IringBuf initIringBuf(){
 	IringBuf ret;
 	ret.maxLen=IringBuf_MAX_LEN;
 	ret.len=0;
@@ -167,4 +167,3 @@ finish:
 #endif
 
 
-#define __CPU_DECODE_H__
