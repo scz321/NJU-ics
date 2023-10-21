@@ -104,6 +104,8 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	arr->mring_arr[arr->ed+1]=newNode;
 	arr->len++;
 	arr->ed++;
+	printf("当前arr->len:%d",arr->len);
+	printf("当前arr->maxLen:%d",arr->maxLen);
 	if(arr->len>arr->maxLen){
 		arr->st++;
 		arr->len--;//这就很容易忘了。。。
@@ -112,7 +114,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 }
 
  void mRingArrPrint(mRingArr* arr){
-	printf("当前len:%d",arr->len);
+	printf("当前len:%d\n",arr->len);
 	for(int i=0;i<arr->len+1;i++){
 		mRingNode temp=arr->mring_arr[i];
 		if(temp.read==1){
