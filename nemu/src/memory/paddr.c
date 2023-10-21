@@ -115,7 +115,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 
  void mRingArrPrint(mRingArr* arr){
 	printf("当前len:%d\n",arr->len);
-	for(int i=0;i<arr->len+1;i++){
+	for(int i=arr->st;i<arr->ed+1;i++){
 		mRingNode temp=arr->mring_arr[i];
 		if(temp.read==1){
 			printf("read:\t");
