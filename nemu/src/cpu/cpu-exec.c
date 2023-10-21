@@ -120,10 +120,11 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+	
     if (nemu_state.state != NEMU_RUNNING) {
 		printf("出现了运行中断/执行结束\n下面输出终止时的指令trace信息:\n");
 		IringBufprint(iring_buf);
-
+		
 		if(new_mring_node.read==true||new_mring_node.write==true){
 			printf("下面输出终止时的访存trace信息:\n");
 			mRingArrPrint(&mring_arr);

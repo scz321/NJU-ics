@@ -62,7 +62,7 @@ void init_mem() {
 //add
 extern mRingNode new_mring_node;
 extern mRingArr mring_arr;
-#define IS_DEBUG_M_TRACE true
+#define IS_DEBUG_M_TRACE false
 //end
 
 
@@ -104,8 +104,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	arr->mring_arr[arr->ed+1]=newNode;
 	arr->len++;
 	arr->ed++;
-	printf("当前arr->len:%d",arr->len);
-	printf("当前arr->maxLen:%d",arr->maxLen);
+	
 	if(arr->len>arr->maxLen){
 		arr->st++;
 		arr->len--;//这就很容易忘了。。。
