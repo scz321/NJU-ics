@@ -35,6 +35,8 @@ word_t isa_reg_str2val(const char *name, bool *success);
 
 // exec
 struct Decode;
+struct IringBuf;//难道一定要先声明？
+struct IringNode;
 int isa_exec_once(struct Decode *s);
 
 // memory

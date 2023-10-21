@@ -13,6 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+#define IringBuf_MAX_LEN 12
 #ifndef __CPU_DECODE_H__
 #define __CPU_DECODE_H__
 
@@ -25,6 +26,69 @@ typedef struct Decode {
   ISADecodeInfo isa;
   IFDEF(CONFIG_ITRACE, char logbuf[128]);
 } Decode;
+
+
+typedef struct IringNode{
+	//word_t inst;//你确定这里只存inst就够了吗？
+	//主打一个自由好吧，哥们只需要pc+inst即可(墨镜可以摘了🤣🤣🤣😎😎😎😭😭😭)
+	//先把最基础的实现，后面再一步一步迭代
+	word_t pc;
+	word_t inst;
+	struct IringNode* next;
+}IringNode;
+//add 指令环形缓冲队列
+typedef struct IringBuf{
+	uint16_t len;
+	uint16_t maxLen;
+	IringNode* head;
+	IringNode* tail;//指向最后一个有效的node
+} IringBuf;
+
+
+bool addNode(IringNode* newNode,IringBuf *iring_buf){
+		if(iring_buf->maxLen>iring_buf->len){
+			//直接加到队列尾部
+			iring_buf->tail->next=newNode;
+			//更新其他属性
+			iring_buf->len++;
+			iring_buf->tail=newNode;
+		}
+		else{
+			//先删除head
+			if(iring_buf->head==NULL) assert(0);
+			iring_buf->head=iring_buf->head->next;
+			iring_buf->len--;
+
+			iring_buf->tail->next=newNode;
+			iring_buf->tail=newNode;
+			iring_buf->len++;
+		}
+		return true;
+}
+
+void IringBufprint(IringBuf iring_buf){
+	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
+	for(int i=0;i<iring_buf.len;i++){
+		printf("%08x:\t%08x\n",cur->pc,cur->inst);
+		cur=cur->next;
+	};
+}
+
+IringBuf initIringBuf(){
+	IringBuf ret;
+	ret.maxLen=IringBuf_MAX_LEN;
+	ret.len=0;
+	//IringNode dummyNode;可以的，精准踩坑
+	 IringNode* dummyNode = (IringNode*)malloc(sizeof(IringNode));
+	ret.head=dummyNode;
+	ret.tail=ret.head;
+	return ret;
+};
+//在执行之前，初始化iringbuf
+IringBuf iring_buf;
+
+
+
 
 // --- pattern matching mechanism ---
 __attribute__((always_inline))

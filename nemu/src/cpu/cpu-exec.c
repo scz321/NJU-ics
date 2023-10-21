@@ -50,12 +50,17 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
+  //add
+  IringNode newNode;
+	newNode.inst=s->isa.inst.val;
+	newNode.pc=s->pc;
+	//end
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-  int ilen = s->snpc - s->pc;
+  int ilen = s->snpc - s->pc;//如果发生了跳转，这里的ilen就比较大了
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
   for (i = ilen - 1; i >= 0; i --) {
@@ -65,8 +70,22 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int space_len = ilen_max - ilen;
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
-  memset(p, ' ', space_len);
+  memset(p,' ', space_len);
   p += space_len;
+#define IS_DEBUG_IRING true
+//add
+	addNode(&newNode,&iring_buf);
+	if(IS_DEBUG_IRING)
+	{
+		printf("已经执行了一次addNode，当前的iringbuf：\n");
+		IringBufprint(iring_buf);
+	}
+//end
+#define CONFIG_IRING_TRACE
+#ifdef CONFIG_IRING_TRACE
+
+#endif
+
 
 #ifndef CONFIG_ISA_loongarch32r
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -114,6 +133,9 @@ void cpu_exec(uint64_t n) {
   }
 
   uint64_t timer_start = get_time();
+
+
+	iring_buf=initIringBuf();
 
   execute(n);
 
