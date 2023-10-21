@@ -46,6 +46,7 @@ typedef struct IringBuf{
 } IringBuf;
 
 inline void IringBufprint(IringBuf iring_buf){
+	printf("=================================start=====================\n");
 printf("当前head指针：%p, 当前tail指针:%p\n", (void*)iring_buf.head, (void*)iring_buf.tail);
 	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
 	//这里还是有隐患，当buf满了之后，第一个可就不再是dummy了！
@@ -87,6 +88,9 @@ inline bool addNode(IringNode *newNode, IringBuf *iring_buf)
 	// IringBufprint(*iring_buf);
 	printf("执行后：\n");
 	IringBufprint(*iring_buf);
+
+		printf("=================================end=====================\n\n\n");
+
 	return true;
 }
 
