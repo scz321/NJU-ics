@@ -15,7 +15,7 @@
 
 #define IringBuf_MAX_LEN 12
 #ifndef __CPU_DECODE_H__
-#define __CPU_DECODE_H__
+
 
 #include <isa.h>
 
@@ -164,3 +164,6 @@ finish:
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }
 
 #endif
+
+
+#define __CPU_DECODE_H__
