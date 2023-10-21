@@ -83,7 +83,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	if(IS_DEBUG_IRING)
 	{
 		printf("已经执行了一次addNode，当前的iringbuf：\n");
-		//IringBufprint(iring_buf);
+		IringBufprint(iring_buf);
 	}
 //end
 #define CONFIG_IRING_TRACE
