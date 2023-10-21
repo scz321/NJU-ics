@@ -76,7 +76,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   space_len = space_len * 3 + 1;
   memset(p,' ', space_len);
   p += space_len;
-#define IS_DEBUG_IRING true
+#define IS_DEBUG_IRING false
 //add
 
 	addNode(&newNode,&iring_buf);
@@ -109,7 +109,11 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
-    if (nemu_state.state != NEMU_RUNNING) break;
+    if (nemu_state.state != NEMU_RUNNING) {
+		printf("发生错误，下面输出发生错误前的12条指令:\n");
+		IringBufprint(iring_buf);
+		break;
+	}
     IFDEF(CONFIG_DEVICE, device_update());
   }
 }
