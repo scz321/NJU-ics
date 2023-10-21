@@ -45,7 +45,16 @@ typedef struct IringBuf{
 	IringNode* tail;//指向最后一个有效的node
 } IringBuf;
 
+inline void IringBufprint(IringBuf iring_buf){
+	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
+	//这里还是有隐患，当buf满了之后，第一个可就不再是dummy了！
+	//呃呃，不过这其实不算是隐患，因为它本来就不在预期的len范围之内
 
+	for(int i=0;i<iring_buf.len;i++){
+		printf("%08x:\t%08x\n",cur->pc,cur->inst);
+		cur=cur->next;
+	};
+}
 inline bool addNode(IringNode* newNode,IringBuf *iring_buf){
 		printf("new nodePc to add:0x%08x\n",newNode->pc);
 		if(iring_buf->maxLen>iring_buf->len){
@@ -65,19 +74,11 @@ inline bool addNode(IringNode* newNode,IringBuf *iring_buf){
 			iring_buf->tail=newNode;
 			iring_buf->len++;
 		}
+		IringBufprint(*iring_buf);
 		return true;
 }
 
-inline void IringBufprint(IringBuf iring_buf){
-	IringNode* cur=iring_buf.head->next;//因为第一个是dummyNode，所以pass掉
-	//这里还是有隐患，当buf满了之后，第一个可就不再是dummy了！
-	//呃呃，不过这其实不算是隐患，因为它本来就不在预期的len范围之内
 
-	for(int i=0;i<iring_buf.len;i++){
-		printf("%08x:\t%08x\n",cur->pc,cur->inst);
-		cur=cur->next;
-	};
-}
 
 inline IringBuf initIringBuf(){
 	IringBuf ret;
