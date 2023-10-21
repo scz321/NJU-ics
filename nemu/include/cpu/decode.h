@@ -56,6 +56,9 @@ inline void IringBufprint(IringBuf iring_buf){
 	};
 }
 inline bool addNode(IringNode* newNode,IringBuf *iring_buf){
+			printf("执行前：\n");
+			IringBufprint(*iring_buf);
+
 		printf("new nodePc to add:0x%08x\n",newNode->pc);
 		if(iring_buf->maxLen>iring_buf->len){
 			//直接加到队列尾部
@@ -76,6 +79,8 @@ inline bool addNode(IringNode* newNode,IringBuf *iring_buf){
 			iring_buf->len++;
 		}
 		//IringBufprint(*iring_buf);
+					printf("执行后：\n");
+			IringBufprint(*iring_buf);
 		return true;
 }
 
