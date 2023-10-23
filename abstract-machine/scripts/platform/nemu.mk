@@ -11,7 +11,7 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
              --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt -b
+NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt -b -e $(IMAGE)-riscv32-nemu.elf
 
 #新增一个flag，用来向nemu的makefile指示当前是否需要设置相关的宏来启动batch_mode
 FLAG_1 = BATCH_MODE_SET_FLAG
