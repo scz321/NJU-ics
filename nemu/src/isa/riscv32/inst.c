@@ -17,6 +17,13 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
+#include <elf.h>
+
+
+//add
+#include "../../monitor/ftrace/ftrace.hpp"//可以用相对路径哦
+//end
+
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
@@ -70,12 +77,13 @@ static word_t sign_extend_20bit(word_t imm20) {
 //辅助函数
 void printBinary(uint32_t value) {
     char binary[33];
-    binary[32] = '\0';  // Null-terminate the string
+    binary[32] = '\0'; // Null-terminate the string
 
     for(int i = 31; i >= 0; i--) {
         binary[i] = (value & 1) ? '1' : '0';
         value >>= 1;
     }
+
     printf("imm[31-25]\trs2\trs1\tfunct\trd\topcode\t\n");
     int i=0;
     for (; i < 7; i++)
@@ -119,6 +127,7 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
+  if(strcmp("jal",(name))==0||strcmp("j",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->pc);}\
 }
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
@@ -179,6 +188,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? 00101 11","auipc"  ,  U,R(rd)=(imm)+s->pc);
 
 
+
 //jal的一个特例：j（无条件跳转），返回值保存到了$0，最终仍然会被覆盖hhh
   INSTPAT("0000000 00000 00000 000 00000 11011 11","j"   ,  U,imm=sign_extend_20bit(imm);R(rd)=s->pc+4;s->pc+=imm;);
 
@@ -196,17 +206,14 @@ static int decode_exec(Decode *s) {
     R(rd) = s->snpc;                   // 保存返回地址
     s->dnpc = s->pc + imm;             // 计算跳转地址
 	if(IS_DEBUG_DECODE)
-    printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
+    	printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
 
-  
 );
 
   //类似于li，这里ret是jalr的一个特例
   INSTPAT("0000000 00000 00001 000 00000 11001 11","ret"    ,I  ,s->dnpc=src1+0;);
   //那顺便也把jalr也实现了吧：
   INSTPAT("??????? ????? ????? 000 ????? 11001 11","jalr"    ,I  ,R(rd)=s->snpc;s->dnpc=src1+imm;);
-
- 
 
 //branch 家族
       //beqz，x2寄存器设置为0寄存器
@@ -297,7 +304,7 @@ static int decode_exec(Decode *s) {
     s->dnpc=s->pc+imm;
   });
   //bgeu-B型
-  INSTPAT("??????? ????? ????? 101 ????? 11000 11","bge",   B, if(src1>=src2){
+  INSTPAT("??????? ????? ????? 101 ????? 11000 11","bgeu",   B, if(src1>=src2){
     s->dnpc=s->pc+imm;
   });
 //blt

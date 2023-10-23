@@ -16,6 +16,9 @@
 #include <isa.h>
 #include <memory/paddr.h>
 
+
+
+
 void init_rand();
 void init_log(const char *log_file);
 void init_mem();
@@ -46,6 +49,12 @@ static char *diff_so_file = NULL;
 static char *img_file = NULL;
 static int difftest_port = 1234;
 
+
+//add elf_file用来记录客户程序对应的elf文件名称
+static char *elf_file = NULL;
+
+
+//end
 static long load_img() {
   if (img_file == NULL) {
     Log("No image is given. Use the default build-in image.");
@@ -75,6 +84,9 @@ static int parse_args(int argc, char *argv[]) {
     {"diff"     , required_argument, NULL, 'd'},
     {"port"     , required_argument, NULL, 'p'},
     {"help"     , no_argument      , NULL, 'h'},
+	//add
+	{"elf"      , required_argument, NULL, 'e'},
+	//end
     {0          , 0                , NULL,  0 },
   };
   int o;
@@ -84,6 +96,9 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      //add
+	  case 'e': elf_file = optarg; break;
+      //end
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);

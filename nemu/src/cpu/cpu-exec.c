@@ -55,7 +55,10 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
 #endif
 }
+//add
+extern void ftraceBufInit();
 
+//end
 
 static void exec_once(Decode *s, vaddr_t pc) {
 	s->pc = pc;
@@ -65,10 +68,15 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	newNode.inst=s->isa.inst.val;
 	newNode.pc=s->pc;
 	//end
+
+	//add
 	new_mring_node.read=false;
 	new_mring_node.write=false;
-	//add
+	//end
 	
+	//add--初始化ftrace所需要的相关信息
+	ftraceBufInit();
+	//end
 
 	isa_exec_once(s);
 	cpu.pc = s->dnpc;
