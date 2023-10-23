@@ -50,8 +50,8 @@ static char *img_file = NULL;
 static int difftest_port = 1234;
 
 
-//add elf_file用来记录客户程序对应的elf文件名称
-static char *elf_file = NULL;
+//add 全局变量elf_file用来记录客户程序对应的elf文件名称
+char *elf_file = NULL;
 
 
 //end

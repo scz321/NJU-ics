@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <elf.h>
 //add
 #include <memory/paddr.h>
 //end
@@ -57,7 +58,27 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 }
 //add
 extern void ftraceBufInit();
+extern char *getFunName(__uint32_t vaddr);
+extern void ftraceBufPrint();
+extern bool ftraceBufAdd(uint32_t paddr);
+extern bool elfInfoInit(char *fileName);
+extern bool get_sh_info();
+extern bool initShStrTbl();
+extern Elf32_Shdr *findByName(char *name);
 
+extern char* elf_file;
+//end
+
+//add
+typedef struct SHTbl
+{
+	int e_shentsize;
+	int e_shnum;
+	__uint64_t e_shoff;
+} SHTbl;
+extern SHTbl sh_tbl;
+extern Elf32_Shdr *strtbl;
+extern Elf32_Shdr *symtbl;
 //end
 
 static void exec_once(Decode *s, vaddr_t pc) {
@@ -74,8 +95,27 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	new_mring_node.write=false;
 	//end
 	
-	//add--初始化ftrace所需要的相关信息
-	ftraceBufInit();
+	//add--初始化ftrace所需要的所有相关的全局变量
+	//下面的初始化的执行前提是启用了-e选项，这可以使用elf_file是否为NULL来进行判断
+	if (elf_file != NULL)
+	{
+		ftraceBufInit();
+		if (!elfInfoInit(elf_file))
+		{
+			assert(0);
+		}
+		if (!get_sh_info(&sh_tbl))
+		{
+			assert(0);
+		}
+		if (!initShStrTbl())
+		{
+			printf("initStrTbl执行出现问题！\n");
+			assert(0);
+		}
+		strtbl = findByName(".strtab");
+		symtbl = findByName(".symtab");
+	}
 	//end
 
 	isa_exec_once(s);
@@ -120,7 +160,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 #endif
 }
-
+extern char* elf_file;
 static void execute(uint64_t n) {
   Decode s;
   mRingArrInit(&mring_arr);
@@ -137,6 +177,10 @@ static void execute(uint64_t n) {
 			printf("下面输出终止时的访存trace信息:\n");
 			mRingArrPrint(&mring_arr);
 		}
+		//当elf_file不为NULL时，说明当前已经启用了-e选项
+		if(elf_file!=NULL)
+		
+
 		break;
 	}
     IFDEF(CONFIG_DEVICE, device_update());
