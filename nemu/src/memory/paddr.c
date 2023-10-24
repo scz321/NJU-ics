@@ -97,14 +97,13 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 	out_of_bound(addr);
 }
 
-
-
  void mRingArrAdd(mRingArr* arr,mRingNode newNode){
 	if(arr->ed+1>M_RING_ARR_MAX) assert(0);
-	arr->mring_arr[arr->ed+1]=newNode;
-	arr->len++;
-	arr->ed++;
-	
+	else{
+		arr->mring_arr[arr->ed+1]=newNode;
+		arr->len++;
+		arr->ed++;
+	}
 	if(arr->len>arr->maxLen){
 		arr->st++;
 		arr->len--;//这就很容易忘了。。。
