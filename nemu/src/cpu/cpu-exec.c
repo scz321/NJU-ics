@@ -95,28 +95,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	new_mring_node.write=false;
 	//end
 	
-	//add--初始化ftrace所需要的所有相关的全局变量
-	//下面的初始化的执行前提是启用了-e选项，这可以使用elf_file是否为NULL来进行判断
-	if (elf_file != NULL)
-	{
-		ftraceBufInit();
-		if (!elfInfoInit(elf_file))
-		{
-			assert(0);
-		}
-		if (!get_sh_info(&sh_tbl))
-		{
-			assert(0);
-		}
-		if (!initShStrTbl())
-		{
-			printf("initStrTbl执行出现问题！\n");
-			assert(0);
-		}
-		strtbl = findByName(".strtab");
-		symtbl = findByName(".symtab");
-	}
-	//end
+	
 
 	isa_exec_once(s);
 	cpu.pc = s->dnpc;
@@ -163,6 +142,32 @@ static void exec_once(Decode *s, vaddr_t pc) {
 extern char* elf_file;
 static void execute(uint64_t n) {
   Decode s;
+
+  
+  //add--初始化ftrace所需要的所有相关的全局变量
+	//下面的初始化的执行前提是启用了-e选项，这可以使用elf_file是否为NULL来进行判断
+	if (elf_file != NULL)
+	{
+		ftraceBufInit();
+		if (!elfInfoInit(elf_file))
+		{
+			assert(0);
+		}
+		if (!get_sh_info(&sh_tbl))
+		{
+			assert(0);
+		}
+		if (!initShStrTbl())
+		{
+			printf("initStrTbl执行出现问题！\n");
+			assert(0);
+		}
+		strtbl = findByName(".strtab");
+		symtbl = findByName(".symtab");
+	}
+	//end
+
+
   mRingArrInit(&mring_arr);
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
