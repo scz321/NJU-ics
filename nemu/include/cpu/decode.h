@@ -52,6 +52,7 @@ typedef struct IringBuf{
 	uint16_t len;
 	uint16_t maxLen;
 	IringNode buf[1024];//大一点没事，溢出就有事了
+	//事实证明，大了反而更加容易溢出
 	int st;
 	int ed;
 } IringBuf;
