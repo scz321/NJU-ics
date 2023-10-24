@@ -46,7 +46,7 @@ typedef struct mRingNode{
 	//读/写所需记录的信息相同，记录要写入和要读出的数据对于debug是没什么意义的
 }mRingNode;
 
-#define M_RING_ARR_MAX 1200//注意它和maxLen的区别
+#define M_RING_ARR_MAX 1212//注意它和maxLen的区别
 typedef struct mRingArr
 {
 	int maxLen;
