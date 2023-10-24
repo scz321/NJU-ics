@@ -98,7 +98,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 }
 
  void mRingArrAdd(mRingArr* arr,mRingNode newNode){
-	if(arr->ed+10>M_RING_ARR_MAX) assert(0);
+	if((arr->ed)+1>M_RING_ARR_MAX) assert(0);
 	else{
 		arr->ed++;
 		arr->mring_arr[arr->ed]=newNode;
