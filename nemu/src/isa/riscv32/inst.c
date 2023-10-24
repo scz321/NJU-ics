@@ -127,7 +127,7 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
-  if(strcmp("jal",(name))==0||strcmp("j",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->dnpc);}\
+  if(strcmp("jal",(name))==0||strcmp("j",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->dnpc,s->pc);}\
 }
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
