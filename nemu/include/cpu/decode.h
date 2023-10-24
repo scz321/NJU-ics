@@ -51,7 +51,7 @@ typedef struct IringBuf{
 	//实力有限，还是老老实实用数组实现吧
 	uint16_t len;
 	uint16_t maxLen;
-	IringNode buf[1024];
+	IringNode buf[1024*1024];//大一点没事，溢出就有事了
 	int st;
 	int ed;
 } IringBuf;
