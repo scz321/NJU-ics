@@ -187,7 +187,6 @@ static void execute(uint64_t n) {
 			printf("函数调用 tracer info:\n");
 			ftraceBufPrint();
 		}
-
 		break;
 	}
     IFDEF(CONFIG_DEVICE, device_update());
