@@ -175,16 +175,18 @@ static void execute(uint64_t n) {
     trace_and_difftest(&s, cpu.pc);
 	
     if (nemu_state.state != NEMU_RUNNING) {
-		printf("出现了运行中断/执行结束\n下面输出终止时的指令trace信息:\n");
+		printf("出现了运行中断/执行结束\ninstruction tracer info:\n");
 		IringBufprint(iring_buf);
 		
 		if(new_mring_node.read==true||new_mring_node.write==true){
-			printf("下面输出终止时的访存trace信息:\n");
+			printf("memory tracer info:\n");
 			mRingArrPrint(&mring_arr);
 		}
 		//当elf_file不为NULL时，说明当前已经启用了-e选项
-		if(elf_file!=NULL)
-		
+		if(elf_file!=NULL){
+			printf("函数调用 tracer info:\n");
+			ftraceBufPrint();
+		}
 
 		break;
 	}
