@@ -127,7 +127,8 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
-  if(strcmp("jal",(name))==0||strcmp("j",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->dnpc,s->pc);}\
+  if(strcmp("jal",(name))==0){ftraceBufAdd(s->dnpc,s->pc,0);}\
+  else if(strcmp("ret",(name))==0){ftraceBufAdd(s->dnpc,s->pc,1);}\
 }
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
@@ -173,8 +174,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", "sh"      ,S, Mw(src1 + imm, 2, src2));
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", "sb"      ,S, Mw(src1 + imm, 1, src2));
 
-
-
   INSTPAT("0000000 00001 00000 000 00000 11100 11", "ebreak" , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   
   //新增
@@ -186,8 +185,6 @@ static int decode_exec(Decode *s) {
 
   INSTPAT("??????? ????? ????? 000 ????? 00100 11","addi"   ,  I,R(rd)=src1+imm);
   INSTPAT("??????? ????? ????? ??? ????? 00101 11","auipc"  ,  U,R(rd)=(imm)+s->pc);
-
-
 
 //jal的一个特例：j（无条件跳转），返回值保存到了$0，最终仍然会被覆盖hhh
   INSTPAT("0000000 00000 00000 000 00000 11011 11","j"   ,  U,imm=sign_extend_20bit(imm);R(rd)=s->pc+4;s->pc+=imm;);
