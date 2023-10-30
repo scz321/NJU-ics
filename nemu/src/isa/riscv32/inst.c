@@ -120,7 +120,7 @@ static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
   s->dnpc = s->snpc;
-
+//||strcmp("jalr",(name))==0
 #define INSTPAT_INST(s) ((s)->isa.inst.val)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
@@ -129,7 +129,7 @@ static int decode_exec(Decode *s) {
   printf("已经正常执行一条汇编：%s\n",(name));\
   if(strcmp("jal",(name))==0){ftraceBufAdd(s->dnpc,s->pc,0);}\
   else if(strcmp("ret",(name))==0){ftraceBufAdd(s->dnpc,s->pc,1);}\
-}//||strcmp("jalr",(name))==0
+}
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", "lui"    , U, R(rd) = imm);
