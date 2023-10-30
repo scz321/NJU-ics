@@ -64,8 +64,8 @@ inline void IringBufprint(IringBuf iring_buf){
 }
 
 inline bool addNode(IringNode *newNode, IringBuf *iring_buf){
-	if(iring_buf->ed+1>1024)
-		assert(0);
+	if(iring_buf->ed+1>1024-1)
+		return false;
 
 
 	iring_buf->buf[iring_buf->ed+1]=*newNode;
