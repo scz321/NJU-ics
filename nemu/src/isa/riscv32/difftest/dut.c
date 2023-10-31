@@ -34,6 +34,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
 	}
 	else
 	{
+		printf("pc值不同！\n");
 		Log("%x\t%x", ref_r->pc, pc);
 		return false;
 	}
