@@ -127,7 +127,7 @@ static int decode_exec(Decode *s) {
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
   if(strcmp("jal",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->dnpc,s->pc,0);}\
-  else if(strcmp("ret",(name))==0){ftraceBufAdd(s->dnpc,s->pc,1);}\
+  else if(strcmp("ret",(name))==0||strcmp("jr",(name))==0){ftraceBufAdd(s->dnpc,s->pc,1);}\
 }
   INSTPAT_START();
   //值得一提的是，这里同样是按照先后顺序进行遍历的，一旦发生了匹配，就会立刻退出
@@ -206,8 +206,11 @@ static int decode_exec(Decode *s) {
 
 );
 
-  //类似于li，这里ret是jalr的一个特例
+  //类似于li，这里ret是jalr的一个特例，具体来说，它是jr的一个特例
   INSTPAT("0000000 00000 00001 000 00000 11001 11","ret"    ,I  ,s->dnpc=src1+0;);
+  //jr也是jalr的一个特例
+	INSTPAT("0000000 00000 ????? 000 00000 11001 11","jr"    ,I  ,s->dnpc=src1+0;);
+
   //那顺便也把jalr也实现了吧：
   INSTPAT("??????? ????? ????? 000 ????? 11001 11","jalr"    ,I  ,R(rd)=s->snpc;s->dnpc=src1+imm;);
 
