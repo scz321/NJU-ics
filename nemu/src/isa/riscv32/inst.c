@@ -126,7 +126,7 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   if(IS_DEBUG_DECODE)\
   printf("已经正常执行一条汇编：%s\n",(name));\
-  if(strcmp("jal",(name))==0){ftraceBufAdd(s->dnpc,s->pc,0);}\
+  if(strcmp("jal",(name))==0||strcmp("jalr",(name))==0){ftraceBufAdd(s->dnpc,s->pc,0);}\
   else if(strcmp("ret",(name))==0){ftraceBufAdd(s->dnpc,s->pc,1);}\
 }
   INSTPAT_START();
