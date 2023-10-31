@@ -228,7 +228,8 @@ static int decode_exec(Decode *s) {
     };);
 
 //R type
-        //sltu
+  
+  //sltu
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11","sltu" ,R  ,R(rd) = (src1 < src2) ? 1 : 0;);
        //slt
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11","slt" ,R  ,R(rd) = ((int)src1 < (int)src2) ? 1 : 0;);
