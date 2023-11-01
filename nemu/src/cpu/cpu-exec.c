@@ -173,6 +173,7 @@ static void execute(uint64_t n) {
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
+	printf("cpu.pc:0x%08x\n",cpu.pc);
     trace_and_difftest(&s, cpu.pc);
 	
     if (nemu_state.state != NEMU_RUNNING) {
