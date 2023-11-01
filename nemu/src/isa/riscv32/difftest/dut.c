@@ -17,7 +17,7 @@
 #include <cpu/difftest.h>
 #include "../local-include/reg.h"
 
-#define IS_DEBUGGING true
+#define IS_DEBUGGING false
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
 {
 
