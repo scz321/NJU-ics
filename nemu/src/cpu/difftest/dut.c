@@ -29,7 +29,9 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 #ifdef CONFIG_DIFFTEST
 
 static bool is_skip_ref = false;
-static int skip_dut_nr_inst = 0;
+static int skip_dut_nr_inst = 0;//如果 skip_dut_nr_inst 大于0，
+//意味着我们要跳过一定数量的 DUT 指令执行
+//。这通常用于当参考模型与待测模型在执行流上有差异时，同步它们的状态。
 
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
@@ -99,10 +101,12 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
   }
 }
 
+//传入的参数是执行一条指令之后的dnpc
 void difftest_step(vaddr_t pc, vaddr_t npc) {
   CPU_state ref_r;
 
   if (skip_dut_nr_inst > 0) {
+	
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     if (ref_r.pc == npc) {
       skip_dut_nr_inst = 0;
@@ -113,6 +117,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     if (skip_dut_nr_inst == 0)
       panic("can not catch up with ref.pc = " FMT_WORD " at pc = " FMT_WORD, ref_r.pc, pc);
     return;
+
   }
 
   if (is_skip_ref) {
@@ -125,7 +130,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
-  checkregs(&ref_r, pc);
+  checkregs(&ref_r, npc);
 }
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) { }
