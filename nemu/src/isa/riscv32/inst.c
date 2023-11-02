@@ -186,7 +186,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? 00101 11","auipc"  ,  U,R(rd)=(imm)+s->pc);
 
 //jal的一个特例：j（无条件跳转），返回值保存到了$0，最终仍然会被覆盖hhh
-  INSTPAT("0000000 00000 00000 000 00000 11011 11","j"   ,  U,imm=sign_extend_20bit(imm);R(rd)=s->pc+4;s->pc+=imm;);
+  INSTPAT("0000000 00000 00000 000 00000 11011 11","j"   ,  U,imm=sign_extend_20bit(imm);R(rd)=s->pc+4;s->dnpc=s->pc+imm;);
 
   //这里直接借用Utype似乎就可以取代所谓的Jtype
   // INSTPAT("??????? ????? ????? ??? ????? 11011 11","jal"   ,  U,imm=sign_extend_20bit(imm);
