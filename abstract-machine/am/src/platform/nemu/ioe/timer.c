@@ -1,18 +1,25 @@
+
 #include <am.h>
 #include <nemu.h>
-#include <sys/time.h>//新增，用来获取当前系统时间
 
-static struct timeval boot_time = {};
+
+
+#define TIME_BASE 0x48
+
 void __am_timer_init() {
+	
+}
+
+
+static uint64_t read_time() {
+  uint32_t lo = *(volatile uint32_t *)(MMIO_BASE + TIME_BASE + 0);
+  uint32_t hi = *(volatile uint32_t *)(MMIO_BASE + TIME_BASE + 4);
+  uint64_t time = ((uint64_t)hi << 32) | lo;
+  return time ;
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-	 
-  struct timeval now;
-  gettimeofday(&now, NULL);
-  long seconds = now.tv_sec - boot_time.tv_sec;
-  long useconds = now.tv_usec - boot_time.tv_usec;
-  uptime->us = seconds * 1000000 + (useconds + 500);
+  uptime->us = read_time() - 0;
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
