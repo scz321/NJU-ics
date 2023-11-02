@@ -172,10 +172,10 @@ static void execute(uint64_t n) {
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
-	printf("===========\n");
-	printf("cpu.pc:0x%08x\n",cpu.pc);
-	printf("s.pc:0x%08x\n",s.pc);
-	printf("===========\n\n");
+	// printf("===========\n");
+	// printf("cpu.pc:0x%08x\n",cpu.pc);
+	// printf("s.pc:0x%08x\n",s.pc);
+	// printf("===========\n\n");
 
     trace_and_difftest(&s, cpu.pc);
 	
