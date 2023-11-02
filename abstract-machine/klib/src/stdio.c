@@ -6,7 +6,17 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+	 char buffer[1024];
+  va_list arg;
+  va_start (arg, fmt);
+  
+  //这里，我一开始的思路是完全按照vsprintf的逻辑进行改写，这说明我还不具备abstraction的思维！
+  int done = vsprintf(buffer, fmt, arg);
+
+  putstr(buffer);
+
+  va_end(arg);
+  return done;
 }
 
 
