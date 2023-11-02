@@ -18,19 +18,23 @@
 #include "../local-include/reg.h"
 
 #define IS_DEBUGGING false
+
+
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
 {
 
 	for (int i = 0; i < 32; ++i)
 	{
 		if(IS_DEBUGGING)
-		printf("cpu.gpr[i]:0x%08x\t,ref_r->gpr[i]:0x%08x\n", cpu.gpr[i], ref_r->gpr[i]);
 
-		if (ref_r->gpr[i] != cpu.gpr[i])
+		if (ref_r->gpr[i] != cpu.gpr[i]){
+			printf("出现了异常寄存器值：\n	cpu.gpr[i]:0x%08x\t,ref_r->gpr[i]:0x%08x\n", cpu.gpr[i], ref_r->gpr[i]);
 			return false;
+
+		}
+			
 	}
-	if(IS_DEBUGGING)
-		printf("ref_r->pc:0x%08x\t,pc:0x%08x\n", ref_r->pc, pc);
+	
 	if (ref_r->pc == pc)
 	{
 		return true;
@@ -39,6 +43,8 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc)
 	{
 		if(IS_DEBUGGING)
 			printf("pc值不同！\n");
+		if(IS_DEBUGGING)
+		printf("ref_r->pc:0x%08x\t,pc:0x%08x\n", ref_r->pc, pc);
 		Log("%x\t%x", ref_r->pc, pc);
 		return false;
 	}
