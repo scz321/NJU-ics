@@ -42,6 +42,7 @@ static void check_bound(IOMap *map, paddr_t addr) {
   }
 }
 
+//对于端口编址，就不用进行映射
 static void invoke_callback(io_callback_t c, paddr_t offset, int len, bool is_write) {
   if (c != NULL) { c(offset, len, is_write); }
 }
