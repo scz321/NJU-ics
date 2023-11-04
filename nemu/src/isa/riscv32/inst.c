@@ -343,6 +343,13 @@ INSTPAT("0000001 ????? ????? 111 ????? 01100 11", "remu", R,
   }
 );
 
+// sra
+INSTPAT("0100000 ????? ????? 101 ????? 00100 11","sra",  R,
+  uint32_t shift_amount = src2 & 0x1F; // 只需要低5位来确定移位数，因为最大移位数为31
+  int32_t signed_val = (int32_t)src1; // 保证我们以有符号数进行移位操作
+  R(rd) = signed_val >> shift_amount; // 执行算术右移操作
+);
+
 
 //最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
 
