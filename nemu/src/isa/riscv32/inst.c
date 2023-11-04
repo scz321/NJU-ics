@@ -263,15 +263,13 @@ static int decode_exec(Decode *s) {
 
 //srai
   INSTPAT("0100000 ????? ????? 101 ????? 00100 11","srai",  I,
-  //取出符号位
-  uint16_t flag=imm&0x010;
-   //我们只取12位imm的低五位
-  imm=(imm & 0x01f) ;
-  if(flag==0x010){
-    //设置高7位为1
-    imm=imm|0xfe0;
-  }
-  R(rd)=(src1>>imm);
+  // 只取imm的低5位用于移动位数
+  imm = imm & 0x1F;
+  // 执行算术右移，由于src1是32位的，所以我们需要把它先转换为一个带符号的32位整数
+  // 然后扩展到64位以保持符号位，然后进行移动
+  int32_t src1_signed = (int32_t)src1; // 将源操作数转换为带符号的32位整数
+  int64_t src1_extended = (int64_t)src1_signed; // 扩展到64位以保持符号位
+  R(rd) = (int32_t)(src1_extended >> imm); // 执行移动并将结果截断回32位
   );
 //slli
   INSTPAT("0000000 ????? ????? 001 ????? 00100 11","slli",  I,
@@ -332,7 +330,8 @@ static int decode_exec(Decode *s) {
 // 	INSTPAT("??????? ????? ????? 010 ?????  ")
 
 //mulh 这里需要注意，src1中的bits我们默认按照uint32_t的形式进行解读，需要先进行一步int32_t
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11","mulh",   R,int64_t ret = (int64_t)(int32_t)src1 * (int32_t)src2; R(rd) = ret >> 32);
+  INSTPAT("0000001 ????? ????? 001 ????? 01100 11","mulh",   R,int64_t ret = (int64_t)(src1 * src2); R(rd) = ret >> 32);
+
 //最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
