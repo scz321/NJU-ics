@@ -343,11 +343,17 @@ INSTPAT("0000001 ????? ????? 111 ????? 01100 11", "remu", R,
   }
 );
 
-// sra
-INSTPAT("0100000 ????? ????? 101 ????? 01100 11","sra",  R,
+// // sra
+// INSTPAT("0100000 ????? ????? 101 ????? 01100 11","sra",  R,
+//   uint32_t shift_amount = src2 & 0x1F; // 只需要低5位来确定移位数，因为最大移位数为31
+//   int32_t signed_val = (int32_t)src1; // 保证我们以有符号数进行移位操作
+//   R(rd) = signed_val >> shift_amount; // 执行算术右移操作
+// );
+// srl
+INSTPAT("000000 ????? ????? 101 ????? 00100 11","srl", R,
   uint32_t shift_amount = src2 & 0x1F; // 只需要低5位来确定移位数，因为最大移位数为31
-  int32_t signed_val = (int32_t)src1; // 保证我们以有符号数进行移位操作
-  R(rd) = signed_val >> shift_amount; // 执行算术右移操作
+  uint32_t value_to_shift = (uint32_t)src1; // 确保我们使用无符号数进行操作
+  R(rd) = value_to_shift >> shift_amount; // 执行逻辑右移操作
 );
 
 
