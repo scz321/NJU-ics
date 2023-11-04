@@ -332,6 +332,18 @@ static int decode_exec(Decode *s) {
 //mulh 这里需要注意，src1中的bits我们默认按照uint32_t的形式进行解读，需要先进行一步int32_t
   INSTPAT("0000001 ????? ????? 001 ????? 01100 11","mulh",   R,int64_t ret = (int64_t)(src1 * src2); R(rd) = ret >> 32);
 
+// remu
+INSTPAT("0000001 ????? ????? 111 ????? 01100 11", "remu", R,
+  // 需要确保src2不为0，因为除数为0是未定义的行为
+  if (src2 == 0) {
+    R(rd) = src1; // 如果src2为0，则通常余数就是被除数本身
+  } else {
+    // 计算无符号余数
+    R(rd) = (uint32_t)src1 % (uint32_t)src2;
+  }
+);
+
+
 //最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
