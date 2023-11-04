@@ -331,14 +331,23 @@ static int decode_exec(Decode *s) {
 // //csrrs
 // 	INSTPAT("??????? ????? ????? 010 ?????  ")
 
+//mulh
+  INSTPAT("0000001 ????? ????? 001 ????? 01100 11","mulh",   R,uint64_t ret=src1*src2;R(rd)=ret>>32);
 
+//最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
   printBinary(s->isa.inst.val);
+
+
+
   INSTPAT_END();
-  
+
   R(0) = 0; // reset $zero to 0
+
+  
+  //啊这个时候就别问这个不着边际的问题了
 
   return 0;
 }
