@@ -91,6 +91,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	newNode.pc=s->pc;
 	//end
 
+	
 	//add
 	new_mring_node.read=false;
 	new_mring_node.write=false;
