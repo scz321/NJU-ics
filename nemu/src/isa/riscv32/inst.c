@@ -198,19 +198,19 @@ static int decode_exec(Decode *s) {
   // R(rd)=s->snpc;s->dnpc=s->pc+imm;printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n",imm,s->dnpc););
   // 修改INSTPAT中的imm字段处理
 
-//   INSTPAT("??????? ????? ????? ??? ????? 11011 11", "jal", U,
-//     uint32_t inst=INSTPAT_INST(s);
-//     imm = ((inst & 0x80000000) >> 11) // 获取第31位并移到imm[20]的位置
-//         | ((inst & 0x7FE00000) >> 20) // 获取21-30位并移到imm[10:1]的位置
-//         | ((inst & 0x00100000) >> 9)  // 获取20位并移到imm[11]的位置
-//         | (inst & 0x000FF000);        // 获取12-19位并置于imm[19:12]的位置
-//     imm = sign_extend_20bit(imm);     // 进行符号扩展
-//     R(rd) = s->snpc;                   // 保存返回地址
-//     s->dnpc = s->pc + imm;             // 计算跳转地址
-// 	if(IS_DEBUG_DECODE)
-//     	printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", "jal", U,
+    uint32_t inst=INSTPAT_INST(s);
+    imm = ((inst & 0x80000000) >> 11) // 获取第31位并移到imm[20]的位置
+        | ((inst & 0x7FE00000) >> 20) // 获取21-30位并移到imm[10:1]的位置
+        | ((inst & 0x00100000) >> 9)  // 获取20位并移到imm[11]的位置
+        | (inst & 0x000FF000);        // 获取12-19位并置于imm[19:12]的位置
+    imm = sign_extend_20bit(imm);     // 进行符号扩展
+    R(rd) = s->snpc;                   // 保存返回地址
+    s->dnpc = s->pc + imm;             // 计算跳转地址
+	if(IS_DEBUG_DECODE)
+    	printf("扩展后的imm:0x%x\n计算后的dnpc：0x%x\n", imm, s->dnpc);
 
-// );
+);
 
   //类似于li，这里ret是jalr的一个特例，具体来说，它是jr的一个特例
   INSTPAT("0000000 00000 00001 000 00000 11001 11","ret"    ,I  ,s->dnpc=src1+0;);
