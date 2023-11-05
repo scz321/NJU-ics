@@ -84,6 +84,7 @@ extern Elf32_Shdr *symtbl;
 static void exec_once(Decode *s, vaddr_t pc) {
 	s->pc = pc;
 	s->snpc = pc;
+	
 	//add
 	IringNode newNode;
 	newNode.inst=s->isa.inst.val;
@@ -93,9 +94,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	//add
 	new_mring_node.read=false;
 	new_mring_node.write=false;
-	//end
-	
-	
+	//end	
 
 	isa_exec_once(s);
 	cpu.pc = s->dnpc;
@@ -123,6 +122,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 		printf("已经执行了一次addNode，当前的iringbuf：\n");
 		IringBufprint(iring_buf);
 	}
+
 //end
 #define CONFIG_IRING_TRACE
 #ifdef CONFIG_IRING_TRACE
