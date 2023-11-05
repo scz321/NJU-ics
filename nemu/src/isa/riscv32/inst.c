@@ -25,6 +25,7 @@
 //end
 
 
+
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
@@ -51,15 +52,18 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
   *rd     = BITS(i, 11, 7);
+
   switch (type) {
     case TYPE_I: src1R();          immI(); if(IS_DEBUG_DECODE) printf("Itype\tImm:0x%x\t\tsrc1:0x%x\t\n",*imm,*src1);break;
     case TYPE_U:                   immU(); if(IS_DEBUG_DECODE) printf("Utype\tImm:0x%x\t\t\n",*imm); break;
     case TYPE_S: src1R(); src2R(); immS(); if(IS_DEBUG_DECODE) printf("Stype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
     //新增
     case TYPE_B: src1R(); src2R(); immB(); if(IS_DEBUG_DECODE) printf("Btype\tImm:0x%x\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*imm,*src1,*src2);break;
-    case TYPE_R: src1R(); src2R();        if(IS_DEBUG_DECODE) printf("Rtype\tImm:NULL\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*src1,*src2);break;
+    case TYPE_R: src1R(); src2R();         if(IS_DEBUG_DECODE) printf("Rtype\tImm:NULL\t\tsrc1:0x%x\tsrc2:0x%x\t\n",*src1,*src2);break;
   }
 }
+
+
 
 //辅助函数，用于实现符号位扩展
 static word_t sign_extend_20bit(word_t imm20) {
@@ -360,7 +364,9 @@ INSTPAT("000000 ????? ????? 101 ????? 01100 11","srl", R,
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
-  printBinary(s->isa.inst.val);
+   printBinary(s->isa.inst.val);
+  INSTPAT("??????? ????? ????? ??? ????? ????? ??", "inv"    , N, INV(s->pc));
+ 
 
 
 
