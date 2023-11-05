@@ -154,6 +154,7 @@ static int decode_exec(Decode *s) {
     temp=temp&0x000000ff;
     R(rd)=temp;
     );
+	
   INSTPAT("??????? ????? ????? 001 ????? 00000 11", "lh"     , I, 
    word_t temp = Mr(src1 + imm, 2);
     //进行符号位扩展
