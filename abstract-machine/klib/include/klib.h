@@ -9,8 +9,9 @@
 extern "C" {
 #endif
 
-#define __NATIVE_USE_KLIB__
- 
+//解引用之后就可以使用kilb的库进行测试
+// #define __NATIVE_USE_KLIB__
+
 // string.h
 void  *memset    (void *s, int c, size_t n);
 void  *memcpy    (void *dst, const void *src, size_t n);
