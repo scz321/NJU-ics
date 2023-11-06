@@ -54,6 +54,6 @@ void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
   rtc->month  = 0;
   rtc->year   = 1900;
   printf("当前正在执行__am_timer_rtc函数\n");
-  printf("rtc->month:%d\n",rtc->year);
+  printf("rtc->month:%d\n",rtc->day);
   //printf("%d-%d-%d %d:%d:%d GMT \n", rtc->year, rtc->month, rtc->day, rtc->hour, rtc->minute, rtc->second);
 }
