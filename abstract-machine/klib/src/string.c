@@ -49,7 +49,6 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-	// printf("当前正在使用kilb中的strcmp\n");
   int i;
   for (i = 0; s1[i] != '\0' && s2[i] != '\0'; ++i){
     if (s1[i] != s2[i])

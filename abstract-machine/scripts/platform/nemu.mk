@@ -11,16 +11,10 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDFLAGS   += -T $(AM_HOME)/scripts/linker.ld \
              --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt  -e $(IMAGE).elf #-b在这里增加-b可以启用批处理模式
-
-#新增一个flag，用来向nemu的makefile指示当前是否需要设置相关的宏来启动batch_mode
-FLAG_1 = BATCH_MODE_SET_FLAG
-
+NEMUFLAGS += -b -l $(shell dirname $(IMAGE).elf)/nemu-log.txt
 
 CFLAGS += -DMAINARGS=\"$(mainargs)\"
 CFLAGS += -I$(AM_HOME)/am/src/platform/nemu/include
-
-CFLAGS += -D__ENABLE_B_OPTION
 .PHONY: $(AM_HOME)/am/src/platform/nemu/trm.c
 
 image: $(IMAGE).elf
@@ -29,20 +23,7 @@ image: $(IMAGE).elf
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: image
-	$(MAKE) -C  $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin 
-
-
-
-#下面的做法纯属娱乐，后续实际使用还是用上面的更高效
-# BATCH_MODE_FLAG=true
-# run: clean-nemu image
-# 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin BATCH_MODE_FLAG=$(BATCH_MODE_FLAG)
-
-
-
-# clean-nemu:
-# 	$(MAKE) -C $(NEMU_HOME) clean 
-
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) gdb ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
