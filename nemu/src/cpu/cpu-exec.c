@@ -86,9 +86,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	s->snpc = pc;
 	
 	//add
+#ifdef CONFIG_ITRACE
 	IringNode newNode;
 	newNode.inst=s->isa.inst.val;
 	newNode.pc=s->pc;
+# endif
 	//end
 
 	
