@@ -176,6 +176,8 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
       break;
     
     case 1:
+		//为了避免报错，我们忽略格式化输出，后续可以拓展
+		if(fmt[i]>='0'||fmt[i]<='9') break;//保持state=1，break;
       switch (fmt[i])
       {
       case 's':
