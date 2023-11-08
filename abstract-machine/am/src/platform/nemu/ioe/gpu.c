@@ -46,6 +46,19 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
+  int win_weight = io_read(AM_GPU_CONFIG).width;  // TODO: get the correct width
+
+  uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+  uint32_t *pi = (uint32_t *)(uintptr_t)ctl->pixels;
+  // printf("(x:%d, y:%d) w=%d, h=%d", ctl->x, ctl->y, ctl->w, ctl->h);
+  for (int i = 0; i < ctl->h; ++i){
+    for (int j = 0; j < ctl->w; ++j){
+      fb[(ctl->y) * win_weight + i * win_weight + ctl->x + j] = pi[i * (ctl->w) + j];
+      //真t娘的奇怪
+      //outl((uint32_t)(fb + ctl->y * win_weight + i * win_weight + ctl->x + j), pi[i * (ctl->w) + j]);
+    }
+  }
+  
   if (ctl->sync) {
     outl(SYNC_ADDR, 1);
   }
@@ -54,3 +67,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
   status->ready = true;
 }
+// void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
+//   if (ctl->sync) {
+//     outl(SYNC_ADDR, 1);
+//   }
+// }
+
+// void __am_gpu_status(AM_GPU_STATUS_T *status) {
+//   status->ready = true;
+// }
