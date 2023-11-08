@@ -35,14 +35,14 @@ void __am_gpu_init() {
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
-  uint32_t info = inl(VGACTL_ADDR);//这里也可能触发一次回调函数
-  uint16_t height = (uint16_t)(info & 0xFFFF);
-  uint16_t width = (uint16_t)(info >> 16);
-  *cfg = (AM_GPU_CONFIG_T) {
-    .present = true, .has_accel = false,
-    .width = width, .height = height,
-    .vmemsz = 0
-  };
+//   uint32_t info = inl(VGACTL_ADDR);//这里也可能触发一次回调函数
+//   uint16_t height = (uint16_t)(info & 0xFFFF);
+//   uint16_t width = (uint16_t)(info >> 16);
+//   *cfg = (AM_GPU_CONFIG_T) {
+//     .present = true, .has_accel = false,
+//     .width = width, .height = height,
+//     .vmemsz = 0
+//   };
 }
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
