@@ -70,6 +70,7 @@ static uint32_t key_dequeue() {
 }
 
 void send_key(uint8_t scancode, bool is_keydown) {
+	printf("执行了一次send_key\n");
   if (nemu_state.state == NEMU_RUNNING && keymap[scancode] != _KEY_NONE) {
     uint32_t am_scancode = keymap[scancode] | (is_keydown ? KEYDOWN_MASK : 0);
     key_enqueue(am_scancode);
@@ -88,7 +89,7 @@ static uint32_t key_dequeue() {
 static uint32_t *i8042_data_port_base = NULL;
 
 static void i8042_data_io_handler(uint32_t offset, int len, bool is_write) {
-	printf("触发keyboard回调函数执行\n");
+	//printf("触发keyboard回调函数执行\n");
   assert(!is_write);
   assert(offset == 0);
   i8042_data_port_base[0] = key_dequeue();
