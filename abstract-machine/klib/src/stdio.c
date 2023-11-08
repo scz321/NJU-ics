@@ -230,6 +230,20 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           append(buffer[k]);
         break;  
 
+	case 'u':
+		unum = va_arg(ap, unsigned int);
+		 if(unum == 0){
+          append('0');
+          break;
+        }
+		for (len = 0; unum ; unum /= 10, ++len)
+          //buffer[len] = num % 10 + '0';//逆序的
+          buffer[len] = HEX_CHARACTERS[unum % 10];//逆序的
+        for (int k = len - 1; k >= 0; --k)
+          append(buffer[k]);
+        break;
+
+
       default:
         assert(0);
       }
