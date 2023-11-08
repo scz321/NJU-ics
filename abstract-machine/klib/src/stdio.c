@@ -168,6 +168,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   for (i = 0, j = 0; fmt[i] != '\0'; ++i){
     switch (state)
     {
+
     case 0:
       if (fmt[i] != '%'){
         append(fmt[i]);
@@ -177,7 +178,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
     
     case 1:
 		//为了避免报错，我们忽略格式化输出，后续可以拓展
-		if(fmt[i]>='0'||fmt[i]<='9') break;//保持state=1，break;
+		if(fmt[i]>='0'&&fmt[i]<='9') break;//保持state=1，break;
       switch (fmt[i])
       {
       case 's':
@@ -244,6 +245,7 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         for (int k = len - 1; k >= 0; --k)
           append(buffer[k]);
         break;
+		
 
 
       default:
@@ -251,7 +253,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
       }
       state = 0;
       break;
-      
     }
   }
 
