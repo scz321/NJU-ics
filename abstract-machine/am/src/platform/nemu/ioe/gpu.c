@@ -60,7 +60,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   }
   
   if (ctl->sync) {
-    outl(SYNC_ADDR, 1);
+    outl(SYNC_ADDR, 1);//SYNC_ADDR这个地址的作用，其实就是执行一次update的触发器
   }
 }
 
@@ -76,3 +76,21 @@ void __am_gpu_status(AM_GPU_STATUS_T *status) {
 // void __am_gpu_status(AM_GPU_STATUS_T *status) {
 //   status->ready = true;
 // }
+
+//这个函数的作用是把*src的内容写进目标偏移量处的显存，
+//uint32_t dest; void *src; int size
+void __am_gpu_memcpy(AM_GPU_MEMCPY_T *params) {
+	uint32_t *src = params->src;
+	// dst的值应当是指定偏移量处的地址，这里是物理地址
+	uint32_t *dst = (uint32_t *)(FB_ADDR + params->dest);
+
+	for (int i = 0; i < params->size >> 2; i++, src++, dst++)
+	{
+		*dst = *src;
+	}
+	char *c_src = (char *)src, *c_dst = (char *)dst;
+	for (int i = 0; i < (params->size & 3); i++)
+	{
+		c_dst[i] = c_src[i];
+	}
+}
