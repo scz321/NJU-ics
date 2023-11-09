@@ -42,6 +42,7 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
 static void init_screen() {
+	printf("非AM状态执行一次update_screen\n");
   SDL_Window *window = NULL;
   char title[128];
   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
