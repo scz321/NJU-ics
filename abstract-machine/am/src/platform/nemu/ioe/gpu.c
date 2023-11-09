@@ -44,7 +44,6 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 //     .vmemsz = 0
 //   };
 }
-
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int win_weight = io_read(AM_GPU_CONFIG).width;  // TODO: get the correct width
 
@@ -60,8 +59,9 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   }
   
   if (ctl->sync) {
-    outl(SYNC_ADDR, 1);//SYNC_ADDR这个地址的作用，其实就是执行一次update的触发器
+    outl(SYNC_ADDR, 1);
   }
+  
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {

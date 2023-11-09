@@ -70,21 +70,24 @@ static inline void update_screen() {
 #endif
 #endif
 
-void vga_update_screen() {
-  // TODO: call `update_screen()` when the sync register is non-zero,
-  // then zero out the sync register
-if (vgactl_port_base[1] & 0x1){
-	printf("执行一次update\n");
-    update_screen();
-    vgactl_port_base[1] = 0;
-  }
-
+void vga_update_screen()
+{
+	// TODO: call `update_screen()` when the sync register is non-zero,
+	// then zero out the sync register
+	if (vgactl_port_base[1] & 0x1)
+	{
+		printf("执行一次update\n");
+		update_screen();
+		vgactl_port_base[1] = 0;
+	}
 }
 static void vga_ctl_io_handler(uint32_t offset, int len, bool is_write) {
   assert(offset == 0 || offset == 4);
   if (is_write && offset == 4) {
     if (vgactl_port_base[1] & 0x1){
-      vga_update_screen();
+      //vga_update_screen();
+	  update_screen();
+	  vgactl_port_base[1] = 0;
     }
   }
 }
@@ -101,7 +104,7 @@ void init_vga() {
 
   vmem = new_space(screen_size());
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
-  //add 新增一个map关系，用来支持VGA的同步寄存器
+  
 
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
