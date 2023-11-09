@@ -55,12 +55,13 @@ static void init_screen() {
       SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
 }
 
-static inline void update_screen() {
-printf("非AM状态执行一次update_screen\n");
-  SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
-  SDL_RenderClear(renderer);
-  SDL_RenderCopy(renderer, texture, NULL, NULL);
-  SDL_RenderPresent(renderer);
+static inline void update_screen()
+{
+	printf("nemu中执行一次update_screen\n");
+	SDL_UpdateTexture(texture, NULL, vmem, SCREEN_W * sizeof(uint32_t));
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
 }
 #else
 static void init_screen() {}
@@ -87,8 +88,8 @@ static void vga_ctl_io_handler(uint32_t offset, int len, bool is_write) {
   if (is_write && offset == 4) {
     if (vgactl_port_base[1] & 0x1){
       //vga_update_screen();
-	  update_screen();
-	  vgactl_port_base[1] = 0;
+	//   update_screen();
+	//   vgactl_port_base[1] = 0;
     }
   }
 }
@@ -105,7 +106,6 @@ void init_vga() {
 
   vmem = new_space(screen_size());
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
-  
 
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
   IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
