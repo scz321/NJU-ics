@@ -57,7 +57,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
       outl((uint32_t)(fb + ctl->y * win_weight + i * win_weight + ctl->x + j), pi[i * (ctl->w) + j]);
     }
   }
-  
+
   if (ctl->sync) {
     outl(SYNC_ADDR, 1);
   }
@@ -88,9 +88,12 @@ void __am_gpu_memcpy(AM_GPU_MEMCPY_T *params) {
 	{
 		*dst = *src;
 	}
+	
 	char *c_src = (char *)src, *c_dst = (char *)dst;
+
 	for (int i = 0; i < (params->size & 3); i++)
 	{
 		c_dst[i] = c_src[i];
 	}
+
 }
