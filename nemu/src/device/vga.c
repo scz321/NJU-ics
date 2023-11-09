@@ -74,7 +74,7 @@ static inline void update_screen() {
 
 void vga_update_screen()
 {
-	printf("执行一次update\n");
+	//printf("执行一次update\n");
 	// TODO: call `update_screen()` when the sync register is non-zero,
 	// then zero out the sync register
 	update_screen();
