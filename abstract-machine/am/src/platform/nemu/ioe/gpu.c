@@ -53,7 +53,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   for (int i = 0; i < ctl->h; ++i){
     for (int j = 0; j < ctl->w; ++j){
       //fb[(ctl->y) * win_weight + i * win_weight + ctl->x + j] = pi[i * (ctl->w) + j];
-      //真t娘的奇怪
+      //使用outl更加稳妥，尤其是涉及到设备的时候，不对，应该说，必须使用out系列
       outl((uint32_t)(fb + ctl->y * win_weight + i * win_weight + ctl->x + j), pi[i * (ctl->w) + j]);
     }
   }
@@ -83,7 +83,7 @@ void __am_gpu_memcpy(AM_GPU_MEMCPY_T *params) {
 	uint32_t *src = params->src;
 	// dst的值应当是指定偏移量处的地址，这里是物理地址
 	uint32_t *dst = (uint32_t *)(FB_ADDR + params->dest);
-	
+
 	for (int i = 0; i < params->size >> 2; i++, src++, dst++)
 	{
 		*dst = *src;
