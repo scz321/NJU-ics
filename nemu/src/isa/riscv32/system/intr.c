@@ -15,12 +15,17 @@
 
 #include <isa.h>
 
+//这个NO我猜测是a7寄存器的值，
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
+ csr.mepc    = epc;
+  csr.mcause  = NO;
 
-  return 0;
+//呃呃，执行ecall
+
+  return csr.mtvec;
 }
 
 word_t isa_query_intr() {

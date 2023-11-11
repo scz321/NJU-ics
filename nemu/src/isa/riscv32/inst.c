@@ -356,11 +356,23 @@ INSTPAT("0100000 ????? ????? 101 ????? 01100 11","sra",  R,
   R(rd) = signed_val >> shift_amount; // 执行算术右移操作
 );
 // srl
-INSTPAT("000000 ????? ????? 101 ????? 01100 11","srl", R,
+INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
   uint32_t shift_amount = src2 & 0x1F; // 只需要低5位来确定移位数，因为最大移位数为31
   uint32_t value_to_shift = (uint32_t)src1; // 确保我们使用无符号数进行操作
   R(rd) = value_to_shift >> shift_amount; // 执行逻辑右移操作
 );
+
+//csrrs-伪指令：csrw
+
+//csrrs
+//INSTPAT("??????? ????? ????? 011 ????? 1110011","csrrc", I,csr.)
+
+
+//=====================pa 3 add================
+//ecall
+
+//这里后续应该需要改进。主要是NO参数的传递。
+INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,s->dnpc=isa_raise_intr(-1,s->pc);	);
 
 
 //最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
