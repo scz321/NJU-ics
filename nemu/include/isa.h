@@ -33,7 +33,7 @@ extern CPU_state cpu;
 void isa_reg_display();
 word_t isa_reg_str2val(const char *name, bool *success);
 	//PA3新增
-	 riscv32_CSR_state csr;
+	extern riscv32_CSR_state csr;
 	
 	//add end
 
