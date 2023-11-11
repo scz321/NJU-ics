@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
-
+extern riscv32_CSR_state csr;
 //这个NO我猜测是a7寄存器的值，
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
