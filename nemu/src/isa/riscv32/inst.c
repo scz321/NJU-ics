@@ -412,7 +412,11 @@ INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
 //ecall
 
 //这里后续应该需要改进。主要是NO参数的传递。
-INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,s->dnpc=isa_raise_intr(-1,s->pc);	);
+INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,
+
+s->dnpc=isa_raise_intr(-1,s->pc); 
+printf("执行了一次ecall，s->dnpc：0x%08x\n",s->dnpc);	
+);
 
 //csrrw伪指令--csrw
 INSTPAT("??????? ????? ????? 001 00000 11100 11","csrw",	I,
