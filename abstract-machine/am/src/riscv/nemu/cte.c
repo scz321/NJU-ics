@@ -2,21 +2,42 @@
 #include <riscv/riscv.h>
 #include <klib.h>
 
+
+#define Machine_Software_Interrupt (11)
+#define User_Software_Interrupt (8)
+#define IRQ_TIMER (0x80000007)
+
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
-  
-  for(int i=0;i<32;i++){
-	printf("0x%08x\n",c->gpr[i]);
-  }
-  if (user_handler) {
+  //用于PA3测试，预期会和前面的
+//   for(int i=0;i<32;i++){
+// 	printf("0x%08x\n",c->gpr[i]);
+//   }
+
+ if (user_handler) {
     Event ev = {0};
-	//根据mcause寄存器的值设置中断原因
+    
     switch (c->mcause) {
+      case Machine_Software_Interrupt:
+      case User_Software_Interrupt:
+        // printf("c->GPR1 = %d \n", c->GPR1);
+        if (c->GPR1 == -1){ 
+          ev.event = EVENT_YIELD;
+        }else {
+          ev.event = EVENT_SYSCALL;
+        }
+        c->mepc += 4;
+        break;
+
+      case IRQ_TIMER:
+        ev.event = EVENT_IRQ_TIMER;
+        break;
+
       default: ev.event = EVENT_ERROR; break;
     }
-	
 
+	
     c = user_handler(ev, c);
     assert(c != NULL);
   }

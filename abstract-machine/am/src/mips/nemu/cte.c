@@ -8,9 +8,14 @@ Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
     uint32_t ex_code = 0;
+
+	
+	//这里我们需要根据mcause寄存器的值，识别出event的类型
     switch (ex_code) {
       default: ev.event = EVENT_ERROR; break;
     }
+
+
 
     c = user_handler(ev, c);
     assert(c != NULL);
