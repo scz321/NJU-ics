@@ -27,6 +27,11 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   //用于设置机器模式的中断向量 mtvec，使其指向 __am_asm_trap 函数
   asm volatile("csrw mtvec, %0" : : "r"(__am_asm_trap));
 
+  //按照讲义，我们应该使用内联汇编，设置mstatus寄存器为0x1800
+  asm volatile("csrw mstatus, %0" : : "r"(0x1800));
+
+	
+
   // register event handler
   user_handler = handler;
 
