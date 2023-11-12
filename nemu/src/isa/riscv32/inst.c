@@ -415,9 +415,12 @@ INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
 
 //这里后续应该需要改进。主要是NO参数的传递。
 INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,
-
-s->dnpc=isa_raise_intr(-1,s->pc); 
-printf("执行了一次ecall，s->dnpc：0x%08x\n",s->dnpc);	
+//这个NO参数，用来赋值给当前的控制状态寄存器,cause，那么它怎么传呢？，显然不是来自ecall指令的某个字段的，
+if(R(17)==-1)
+	s->dnpc=isa_raise_intr(11,s->pc);
+else
+	s->dnpc=isa_raise_intr(8,s->pc);
+printf("执行了一次ecall，s->dnpc：0x%08x\n",s->dnpc);
 );
 
 //csrrw伪指令--csrw
