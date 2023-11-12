@@ -57,6 +57,7 @@ typedef struct { // 自行添加，但并不知道是否会引起问题
     } m;
     word_t value;
   } mstatus;
+  
   word_t mcause; //一个char*指针也就是word_t，没毛病。
 } riscv32_CSR_state;
 

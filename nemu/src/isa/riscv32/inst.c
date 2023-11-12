@@ -132,6 +132,30 @@ uint32_t* get_csr(word_t IMM,word_t* preval){
 		return &csr.mtvec;
 
 	}
+	else if(IMM==0x342){
+		printf("当前寄存器编号对应于mcause\n");
+		*preval=csr.mcause;
+		return &csr.mcause;
+	}
+	else if(IMM==0x300){
+		printf("当前寄存器编号对应于mstatus\n");
+		*preval=csr.mstatus.value;
+		//要正确地从联合体中提取 word_t 值，您应该使用 csr.mstatus.value，
+		//这样才能访问联合体中的 word_t 成员。
+		return &csr.mstatus.value;
+	}
+	else if(IMM==0x341){
+		printf("当前寄存器编号对应于mepc\n");
+		*preval=csr.mepc;
+		return &csr.mepc;
+	}
+	else{
+
+		printf("==============ERROR!===========================================\n");
+		printf("未检测到与该编号0x%08x:对应的寄存器，请结合反汇编+IMM字段，考虑新增！！\n",IMM);
+		printf("==============ERROR!===========================================\n");
+		
+	}
 	return NULL;
 }
 
@@ -391,7 +415,14 @@ INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
 INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,s->dnpc=isa_raise_intr(-1,s->pc);	);
 
 //csrrw伪指令--csrw
-
+INSTPAT("??????? ????? ????? 001 00000 11100 11","csrw",	I,
+	word_t preval=-1;
+	uint32_t* temp_ptr=get_csr(imm,&preval);
+	*temp_ptr=src1;
+	
+	printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
+	R(rd)=preval;
+);
 
 //csrrw
 
@@ -404,7 +435,35 @@ INSTPAT("??????? ????? ????? 001 ????? 11100 11","csrrw",	I,
 	R(rd)=preval;
 );
 
-//最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
+//csrrs伪指令--csrr
+//csrrs
+
+INSTPAT("??????? ????? 00000 010 ????? 11100 11","csrr",	I,
+	word_t preval=-1;
+	uint32_t* temp_ptr=get_csr(imm,&preval);
+	*temp_ptr=preval|src1;
+	R(rd)=preval;
+);
+
+
+
+//csrrs
+
+INSTPAT("??????? ????? ????? 010 ????? 11100 11","csrrs",	I,
+	word_t preval=-1;
+	uint32_t* temp_ptr=get_csr(imm,&preval);
+	*temp_ptr=preval|src1;
+	R(rd)=preval;
+);
+
+
+
+
+
+
+
+
+//-------------------------------------分界线-------------------------------
 
 //如果都不匹配，输出当前的指令信息，便于指令系统的扩展
   printf("没有与当前指令匹配的rule，请考虑新增！\n");
