@@ -127,8 +127,10 @@ uint32_t* get_csr(word_t IMM,word_t* preval){
 	if(IMM==0x305)//mtvec的寄存器编号
 	{
 		printf("当前寄存器编号对应于mtvec\n");
+		
 		*preval=csr.mtvec;
 		return &csr.mtvec;
+
 	}
 	return NULL;
 }
@@ -397,6 +399,8 @@ INSTPAT("??????? ????? ????? 001 ????? 11100 11","csrrw",	I,
 	word_t preval=-1;
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=src1;
+	
+	printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
 	R(rd)=preval;
 );
 
