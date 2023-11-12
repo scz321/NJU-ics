@@ -86,8 +86,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	s->snpc = pc;
 	
 //pa3 测试  add
-if(s->pc==0x8000075c){
-	printf("用于PA3测试，s->pc==0x8000075c\n");
+if(s->pc==0x800006b8){//其实就是csr.mtvec，也就是__am_asm_trap的地址
+	printf("用于PA3测试，s->pc==0x800006b8\n");
 	isa_reg_display();
 }
 // end
