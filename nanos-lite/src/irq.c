@@ -16,8 +16,14 @@
 //这个函数会用来初始化am中的user_handler，也即事件分发函数/事件处理回调函数
 //
 static Context* do_event(Event e, Context* c) {
+	printf("=======开始执行handler函数=========\n");
+		printf("=======开始执行handler函数=========\n");
+	printf("=======开始执行handler函数=========\n");
+	printf("=======开始执行handler函数=========\n");
+	printf("=======开始执行handler函数=========\n");
+	printf("=======开始执行handler函数=========\n");
+	printf("=======开始执行handler函数=========\n");
 
-	
 
   switch (e.event) {
 	case EVENT_NULL:
