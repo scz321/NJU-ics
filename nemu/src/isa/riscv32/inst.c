@@ -448,6 +448,7 @@ INSTPAT("??????? ????? 00000 010 ????? 11100 11","csrr",	I,
 	word_t preval=-1;
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=preval|src1;
+	printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
 	R(rd)=preval;
 );
 
@@ -459,6 +460,7 @@ INSTPAT("??????? ????? ????? 010 ????? 11100 11","csrrs",	I,
 	word_t preval=-1;
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=preval|src1;
+	printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
 	R(rd)=preval;
 );
 
