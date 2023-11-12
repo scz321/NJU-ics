@@ -85,6 +85,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
 	s->pc = pc;
 	s->snpc = pc;
 	
+//pa3 测试  add
+if(s->pc==0x8000075c){
+	printf("用于PA3测试，s->pc==0x8000075c\n");
+	isa_reg_display();
+}
+// end
 	//add
 #ifdef CONFIG_ITRACE
 	IringNode newNode;
