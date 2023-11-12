@@ -120,6 +120,23 @@ void printBinary(uint32_t value) {
 
     //  printf("当前指令: %s\n", binary);
 }
+
+//辅助函数，用来实现指令中的编号和具体的控制寄存器之间的映射关系
+//返回对应寄存器的指针
+uint32_t* get_csr(word_t IMM,word_t* preval){
+	if(IMM==0x305)//mtvec的寄存器编号
+	{
+		printf("当前寄存器编号对应于mtvec\n");
+		*preval=csr.mtvec;
+		return &csr.mtvec;
+	}
+	return NULL;
+}
+
+
+
+
+
 static int decode_exec(Decode *s) {
   int rd = 0;
   word_t src1 = 0, src2 = 0, imm = 0;
@@ -362,10 +379,7 @@ INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
   R(rd) = value_to_shift >> shift_amount; // 执行逻辑右移操作
 );
 
-//csrrs-伪指令：csrw
 
-//csrrs
-//INSTPAT("??????? ????? ????? 011 ????? 1110011","csrrc", I,csr.)
 
 
 //=====================pa 3 add================
@@ -374,6 +388,17 @@ INSTPAT("0000000 ????? ????? 101 ????? 01100 11","srl", R,
 //这里后续应该需要改进。主要是NO参数的传递。
 INSTPAT("0000000 00000 00000 000 00000 11100 11","ecall",	I,s->dnpc=isa_raise_intr(-1,s->pc);	);
 
+//csrrw伪指令--csrw
+
+
+//csrrw
+
+INSTPAT("??????? ????? ????? 001 ????? 11100 11","csrrw",	I,
+	word_t preval=-1;
+	uint32_t* temp_ptr=get_csr(imm,&preval);
+	*temp_ptr=src1;
+	R(rd)=preval;
+);
 
 //最后一条INSTPAT和INSTPAT_END之间的部分是错误处理
 
