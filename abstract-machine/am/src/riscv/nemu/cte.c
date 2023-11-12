@@ -5,12 +5,17 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
+  
+  for(int i=0;i<32;i++){
+	printf("0x%08x\n",c->gpr[i]);
+  }
   if (user_handler) {
     Event ev = {0};
 	//根据mcause寄存器的值设置中断原因
     switch (c->mcause) {
       default: ev.event = EVENT_ERROR; break;
     }
+	
 
     c = user_handler(ev, c);
     assert(c != NULL);
@@ -29,8 +34,6 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 
   //按照讲义，我们应该使用内联汇编，设置mstatus寄存器为0x1800
   asm volatile("csrw mstatus, %0" : : "r"(0x1800));
-
-	
 
   // register event handler
   user_handler = handler;

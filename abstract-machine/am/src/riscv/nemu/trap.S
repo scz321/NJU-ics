@@ -27,13 +27,13 @@ f(30) f(31)
 #define OFFSET_STATUS (33 * XLEN)
 #define OFFSET_EPC    (34 * XLEN)
 
+#草，汇编中也能用宏的。6
 .align 3
 .globl __am_asm_trap
 __am_asm_trap:
   addi sp, sp, -CONTEXT_SIZE
 
   MAP(REGS, PUSH)
-
   csrr t0, mcause
   csrr t1, mstatus
   csrr t2, mepc
