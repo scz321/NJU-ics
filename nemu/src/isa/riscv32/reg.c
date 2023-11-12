@@ -62,11 +62,16 @@ word_t isa_reg_str2val(const char *s, bool *success) {
         printf("cpu.gpr[i]:%u\n",cpu.gpr[i]);
       return cpu.gpr[i];
     }
-	printf("下面进行pc的匹配\n");
+	
+  }
+   
+   printf("下面进行pc的匹配\n");
 	if(strcmp(s,"pc")==0){
+		*success=true;
 		return cpu.pc;
 	}
-  }
+   
+   
    *success=false;
   return 0;
 }
