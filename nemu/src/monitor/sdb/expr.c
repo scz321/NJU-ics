@@ -184,12 +184,12 @@ bool make_token(char *e)
           tokens[nr_token].type=REG;
           strncpy(tokens[nr_token].str, substr_start+1, substr_len);//注意我这里把$删除了
           nr_token++;
+
           break;
         default:
           printf("意外的tokenType！\n");
           break;
         }
-
 
 
         // 这里需要break，因为我们识别出了一个token，自然不需要再遍历其他rule
@@ -238,8 +238,6 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   //下面开始伟大的递归求值!
-
-
   
 }
 
