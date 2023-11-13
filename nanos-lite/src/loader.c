@@ -96,7 +96,7 @@ static void read(int fd, void *buf, size_t offset, size_t len){
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //int fd = fs_open(filename, 0, 0);
-  int fd = fs_open("../build/ramdisk.img", 0, 0);
+  int fd = fs_open("../build/ramdisk.img", 0, 0);//这里暂时写死
   Elf_Ehdr elf_header;
   read(fd, &elf_header, 0, sizeof(elf_header));
   //根据小端法 0x7F E L F
