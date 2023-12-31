@@ -21,10 +21,10 @@
 typedef struct {
   word_t gpr[32];
   vaddr_t pc;
-  //   //pa3 add
-//   word_t mepc;
-//   word_t mstatus;
-//   word_t mcause;
+    //pa3 add
+  word_t mepc;
+  word_t mstatus;
+  word_t mcause;
 } riscv32_CPU_state;
 
 typedef struct { // 自行添加，但并不知道是否会引起问题

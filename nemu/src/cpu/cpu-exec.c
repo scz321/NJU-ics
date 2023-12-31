@@ -176,7 +176,6 @@ static void execute(uint64_t n) {
 	}
 	//end
 
-
   mRingArrInit(&mring_arr);
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);

@@ -240,7 +240,6 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
-
 #ifdef __ENABLE_B_OPTION
   printf("__ENABLE_B_OPTION is defined!!\n");
   is_batch_mode = true;
@@ -252,56 +251,6 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-
-  //测试表达式求值start
-  // FILE *file = fopen("./input.txt", "r");  // 打开文本文件
-
-  // if (file == NULL) {
-  //     perror("Unable to open file");
-  //     return ;
-  // }
-  //  char line[1000];  // 适当选择行缓冲区大小
-  //   uint32_t uintVal;
-  //   char strVal[100];
-  //   int testNum=0;
-  //   int succesNum=0;
-  //   while (fgets(line, sizeof(line), file) != NULL) {
-  //     testNum++;
-  //       // 解析每行数据
-  //       if (sscanf(line, "%u %s", &uintVal, strVal) == 2) {
-  //           // 处理解析得到的数据
-  //           //printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
-  //           bool t;
-  //           uint32_t ret=(uint32_t)(expr(strVal,&t));
-  //           if(t==false){
-  //             //printf("expr函数执行失败！\n");
-  //           }
-  //           if(ret==uintVal){
-  //             succesNum++;
-  //             //printf("expr()执行结果：%u,测试成功！\n",ret);
-  //           }
-  //           else{
-  //             printf("=====================================\n");
-  //             printf("Read uint32_t: %u, Read string: %s  ", uintVal, strVal);
-  //             IS_DEBUG_EXPR=true;
-  //             expr(strVal,&t);
-  //             IS_DEBUG_EXPR=false;//注意需要在合适的位置重置IS_DEBUG_EXPR为false
-  //             printf("expr()执行结果：%u,测试失败！\n", ret);
-  //             printf("=====================================\n");
-
-  //             // printf("expr()执行结果：%u,测试失败！\n",ret);
-  //           }
-  //       } else {
-  //           printf("Invalid format in line: %s\n", line);
-  //       }
-        
-  //   }
-  //   printf("测试用例数量：%d\n",testNum);
-  //   printf("测试成功数量：%d\n",succesNum);
-
-  //测试表达式求值end
-
-
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -315,12 +264,10 @@ void sdb_mainloop() {
     if (args >= str_end) {
       args = NULL;
     }
-
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
 #endif
-
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
@@ -331,8 +278,6 @@ void sdb_mainloop() {
     //这部分用于支持watchpoint的实现：
         //遍历head链表中的所有wp，输出preVal发生变化的wp并且更新之
     //changeDisplay();不应该在这里执行检查
-
-
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }

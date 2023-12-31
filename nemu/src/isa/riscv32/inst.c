@@ -299,6 +299,10 @@ static int decode_exec(Decode *s) {
   if(src1!=src2){
       s->dnpc=s->pc+imm;
     };);
+
+	//最ty的一集
+	
+
 //sub
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11","sub"  ,S  ,R(rd)=src1-src2;);
 //add
