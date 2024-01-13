@@ -106,25 +106,26 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   size_t headers_entry_size = elf_header.e_phentsize;
   int headers_entry_num = elf_header.e_phnum;
 
-  for (int i = 0; i < headers_entry_num; ++i){
-    Elf_Phdr section_entry;
-    read(fd, &section_entry, 
-      i * headers_entry_size + program_header_offset, sizeof(elf_header));
-    void * virt_addr;
-    switch (section_entry.p_type) {
-    case PT_LOAD:
-      virt_addr = (void *)section_entry.p_vaddr; 
-      read(fd, virt_addr, section_entry.p_offset, section_entry.p_filesz);
-      memset(virt_addr + section_entry.p_filesz, 0, 
-        section_entry.p_memsz - section_entry.p_filesz);
-      break;
-    
-    default:
-      break;
-    }
+  for (int i = 0; i < headers_entry_num; ++i)
+  {
+	  Elf_Phdr section_entry;
+	  read(fd, &section_entry,
+		   i * headers_entry_size + program_header_offset, sizeof(elf_header));
+	  void *virt_addr;
+	  switch (section_entry.p_type)
+	  {
+	  case PT_LOAD:
+		  virt_addr = (void *)section_entry.p_vaddr;
+		  read(fd, virt_addr, section_entry.p_offset, section_entry.p_filesz);
+		  memset(virt_addr + section_entry.p_filesz, 0,
+				 section_entry.p_memsz - section_entry.p_filesz);
+		  break;
 
+	  default:
+		  break;
+	  }
   }
-  
+
   return elf_header.e_entry;
 }
 

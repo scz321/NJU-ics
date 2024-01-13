@@ -245,8 +245,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
         for (int k = len - 1; k >= 0; --k)
           append(buffer[k]);
         break;
-		
-
 
       default:
         assert(0);
