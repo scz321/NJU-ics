@@ -12,7 +12,7 @@
 //   const char *msg;
 // } Event;
 
-
+void do_syscall(Context *c);
 //这个函数会用来初始化am中的user_handler，也即事件分发函数/事件处理回调函数
 //
 static Context* do_event(Event e, Context* c) {
@@ -34,6 +34,7 @@ static Context* do_event(Event e, Context* c) {
 		break;
 	case EVENT_SYSCALL:
 		printf("当前中断事件类型为EVENT_SYSCALL(%d)\n",EVENT_SYSCALL);
+		do_syscall(c);
 		break;
 	case EVENT_PAGEFAULT:
 		printf("当前中断事件类型为EVENT_PAGEFAULT(%d)\n",EVENT_PAGEFAULT);

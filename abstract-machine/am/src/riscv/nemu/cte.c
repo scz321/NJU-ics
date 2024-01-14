@@ -24,6 +24,7 @@ Context* __am_irq_handle(Context *c) {
     switch (c->mcause) {
       case Machine_Software_Interrupt:
       case User_Software_Interrupt:
+	  //根据a7寄存器的值分为两种，一种是yield，一种是syscaall
         // printf("c->GPR1 = %d \n", c->GPR1);
         if (c->GPR1 == -1){ 
           ev.event = EVENT_YIELD;
