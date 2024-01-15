@@ -99,6 +99,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   //int fd = fs_open("../build/ramdisk.img", 0, 0);//这里暂时写死
   
    int fd = fs_open(filename, 0, 0);
+
+   //emmm再在loader的背景下，我们默认被加载的文件属于是32bit的elf文件
   
   
   Elf_Ehdr elf_header;

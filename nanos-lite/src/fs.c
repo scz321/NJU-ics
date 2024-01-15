@@ -104,7 +104,7 @@ void init_fs() {
 
 //flag, mode 被忽视
 int fs_open(const char *pathname, int flags, int mode){
-	printf("预期的pathname：%s\n",pathname);
+	printf("预期将被open的pathname：%s\n",pathname);
   for (int i = 0; i < sizeof(file_table) / sizeof(Finfo); ++i){
 
     if (strcmp(pathname, file_table[i].name) == 0){
