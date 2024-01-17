@@ -84,7 +84,7 @@ static Finfo file_table[] __attribute__((used)) = {
   [FD_STDOUT]   = {"stdout", 0, 0, invalid_read, serial_write},
   [FD_STDERR]   = {"stderr", 0, 0, invalid_read, serial_write},
   [FD_FB]   = {"/dev/fb", 0, 0, invalid_read, fb_write},
-  {"/dev/events", 0, 0, events_read, invalid_write},
+  {"/dev/events", 0, 0, events_read, invalid_write},//目前的events_read默认只有读取键盘输入
   {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
