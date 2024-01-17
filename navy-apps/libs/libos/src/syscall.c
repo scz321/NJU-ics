@@ -56,16 +56,15 @@ void _exit(int status) {
   while (1);
 }
 
-
 int _open(const char *path, int flags, mode_t mode) {
   return _syscall_(SYS_open, (intptr_t)path, flags, mode);
 }
 
 int _write(int fd, void *buf, size_t count) {
-  return _syscall_(SYS_write, fd, (intptr_t)buf, count);//scz modified
+  return _syscall_(SYS_write, fd, (intptr_t)buf, count);
 }
 
-extern char end;//linux特有的符号
+extern char end;
 void * program_break = NULL;
 
 void *_sbrk(intptr_t increment) {
@@ -97,13 +96,13 @@ off_t _lseek(int fd, off_t offset, int whence) {
 }
 
 int _gettimeofday(struct timeval *tv, struct timezone *tz) {
-  _exit(SYS_gettimeofday);
-  return 0;
+  int ret = _syscall_(SYS_gettimeofday, (intptr_t)tv, (intptr_t)tz, 0);
+  return ret;
 }
 
 int _execve(const char *fname, char * const argv[], char *const envp[]) {
-  _exit(SYS_execve);
-  return 0;
+  int ret = _syscall_(SYS_execve, (intptr_t)fname, (intptr_t)argv, (intptr_t)envp);
+  return ret;
 }
 
 // Syscalls below are not used in Nanos-lite.
