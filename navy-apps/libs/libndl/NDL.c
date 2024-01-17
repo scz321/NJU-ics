@@ -24,7 +24,21 @@ int NDL_PollEvent(char *buf, int len) {
   return read(fp, buf, sizeof(char) * len);
 }
 
+static int canvas_w, canvas_h, canvas_x = 0, canvas_y = 0;
+
 void NDL_OpenCanvas(int *w, int *h) {
+	if (*w == 0){
+    *w = screen_w;
+  }else if(*w > screen_w){
+    assert(0);
+  }
+  if (*h == 0){
+    *h = screen_h;
+  }else if(*h > screen_h){
+    assert(0);
+  }
+  canvas_w = *w;
+  canvas_h = *h;
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
@@ -61,10 +75,59 @@ int NDL_QueryAudio() {
   return 0;
 }
 
+static void read_key_value(char *str, char *key, int* value){
+  char buffer[128];
+  int len = 0;
+  for (char* c = str; *c; ++c){
+    if(*c != ' '){
+      buffer[len++] = *c;
+    }
+  }
+  buffer[len] = '\0';
+
+  sscanf(buffer, "%[a-zA-Z]:%d", key, value);
+  // printf("read_key_value\n");
+}
 int NDL_Init(uint32_t flags) {
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
+
+  char info[128], key[64];
+  int value;
+
+//读取屏幕信息
+int dispinfo = open("/proc/dispinfo", 0);
+  read(dispinfo, info, sizeof(info));//这里就会触发dispinfo_read函数
+  //这里的read本质上会对当前的info进行写的操作
+  close(dispinfo);
+
+  /* 获取第一个子字符串 */
+  char *token = strtok(info, "\n");
+   
+   /* 继续获取其他的子字符串 */
+   while( token != NULL ) {
+      
+      // printf("while begin 105 %s \n", info);
+      //printf("%s = %d\n", key, value);
+      read_key_value(token, key, &value);
+
+      if(strcmp(key, "WIDTH") == 0){
+        screen_w = value;
+      }else if(strcmp(key, "HEIGHT") == 0) {
+        screen_h = value;
+      }
+
+      // printf("while middle 105 %s \n", info);
+      token = strtok(NULL, "\n");
+      // printf("while end 105 %s \n", info);
+  }
+
+  printf("With width = %d, height = %d.\n", screen_w, screen_h);
+
+  return 0;
+
+
   return 0;
 }
 
