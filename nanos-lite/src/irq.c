@@ -27,7 +27,7 @@ static Context* do_event(Event e, Context* c) {
 		printf("当前中断事件类型为EVENT_YIELD(%d)\n",EVENT_YIELD);
 		break;
 	case EVENT_SYSCALL:
-		printf("当前中断事件类型为EVENT_SYSCALL(%d)\n",EVENT_SYSCALL);
+		//printf("当前中断事件类型为EVENT_SYSCALL(%d)\n",EVENT_SYSCALL);
 		do_syscall(c);
 		break;
 	case EVENT_PAGEFAULT:
