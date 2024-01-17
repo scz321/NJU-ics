@@ -80,11 +80,11 @@ void sys_gettimeofday(Context *c){
 }
 
 static void strace(Context *c){
-  #ifdef STRACE
+ 
     //TODO: 缺一个trace
     Log("System call trace\nmcause\t\tGPR1\t\tGPR2\t\tGPR3\t\tGPR4 \n0x%x\t%d\t\t0x%x\t\t0x%x\t\t0x%x",
       c->mcause, c->GPR1, c->GPR2, c->GPR3, c->GPR4);
-  #endif
+  
 }
 
 void do_syscall(Context *c) {

@@ -5,7 +5,7 @@
 #include <time.h>
 #include "syscall.h"
 
-// helper macros
+// helper macr
 #define _concat(x, y) x ## y
 #define concat(x, y) _concat(x, y)
 #define _args(n, list) concat(_arg, n) list
