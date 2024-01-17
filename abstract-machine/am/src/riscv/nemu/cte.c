@@ -19,7 +19,7 @@ Context* __am_irq_handle(Context *c) {
     Event ev = {0};
 	printf("=====================\n");
     printf("当前c->mcause：0x%08x\n",c->mcause);
-		printf("=====================\n");
+	printf("=====================\n");
 
     switch (c->mcause) {
       case Machine_Software_Interrupt:
