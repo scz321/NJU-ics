@@ -90,7 +90,7 @@ static void strace(Context *c){
 void do_syscall(Context *c) {
   uintptr_t a[4];
   a[0] = c->GPR1;
-	printf("当前a[0](syscall类型):%d\n",a[0]);
+	// printf("当前a[0](syscall类型):%d\n",a[0]);
   strace(c);
 	
   switch (a[0]) {

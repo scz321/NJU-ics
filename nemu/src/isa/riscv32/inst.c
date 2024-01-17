@@ -424,7 +424,7 @@ if(R(17)==-1)
 	s->dnpc=isa_raise_intr(11,s->pc);
 else
 	s->dnpc=isa_raise_intr(8,s->pc);
-printf("执行了一次ecall，s->dnpc：0x%08x\n",s->dnpc);
+//printf("执行了一次ecall，s->dnpc：0x%08x\n",s->dnpc);
 );
 
 //csrrw伪指令--csrw
