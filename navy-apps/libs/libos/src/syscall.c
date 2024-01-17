@@ -110,7 +110,7 @@ int _execve(const char *fname, char * const argv[], char *const envp[]) {
 
 int _fstat(int fd, struct stat *buf) {
   return -1;
-}cd
+}
 
 int _stat(const char *fname, struct stat *buf) {
   assert(0);
