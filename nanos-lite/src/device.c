@@ -28,7 +28,7 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 
 //offset被忽视
 size_t events_read(void *buf, size_t offset, size_t len) {
-  printf("events_read正在被调用\n");
+  //printf("events_read正在被调用\n");
   AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
   if (ev.keycode == AM_KEY_NONE) return 0;
   
@@ -44,6 +44,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   
   if (real_length<= len){
     strcat(buf, keyname[ev.keycode]);
+	printf("一次键盘事件被写入\n");
   }else {
     Log("Need %d for %s%s but got %d", strlen(keyname[ev.keycode]), buf, keyname[ev.keycode], len);
     assert(0);
