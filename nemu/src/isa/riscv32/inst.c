@@ -126,26 +126,26 @@ void printBinary(uint32_t value) {
 uint32_t* get_csr(word_t IMM,word_t* preval){
 	if(IMM==0x305)//mtvec的寄存器编号
 	{
-		printf("当前寄存器编号对应于mtvec\n");
+		// printf("当前寄存器编号对应于mtvec\n");
 		
 		*preval=csr.mtvec;
 		return &csr.mtvec;
 
 	}
 	else if(IMM==0x342){
-		printf("当前寄存器编号对应于mcause\n");
+		// printf("当前寄存器编号对应于mcause\n");
 		*preval=csr.mcause;
 		return &csr.mcause;
 	}
 	else if(IMM==0x300){
-		printf("当前寄存器编号对应于mstatus\n");
+		// printf("当前寄存器编号对应于mstatus\n");
 		*preval=csr.mstatus.value;
 		//要正确地从联合体中提取 word_t 值，您应该使用 csr.mstatus.value，
 		//这样才能访问联合体中的 word_t 成员。
 		return &csr.mstatus.value;
 	}
 	else if(IMM==0x341){
-		printf("当前寄存器编号对应于mepc\n");
+		// printf("当前寄存器编号对应于mepc\n");
 		*preval=csr.mepc;
 		return &csr.mepc;
 	}
@@ -433,7 +433,7 @@ INSTPAT("??????? ????? ????? 001 00000 11100 11","csrw",	I,
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=src1;
 	
-	printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
+	//printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
 	R(rd)=preval;
 );
 
@@ -444,7 +444,7 @@ INSTPAT("??????? ????? ????? 001 ????? 11100 11","csrrw",	I,
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=src1;
 	
-	printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
+	//printf("目前csr寄存器将会被赋值为：0x%08x\n",src1);
 	R(rd)=preval;
 );
 
@@ -455,7 +455,7 @@ INSTPAT("??????? ????? 00000 010 ????? 11100 11","csrr",	I,
 	word_t preval=-1;
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=preval|src1;
-	printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
+	//printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
 	R(rd)=preval;
 );
 
@@ -467,7 +467,7 @@ INSTPAT("??????? ????? ????? 010 ????? 11100 11","csrrs",	I,
 	word_t preval=-1;
 	uint32_t* temp_ptr=get_csr(imm,&preval);
 	*temp_ptr=preval|src1;
-	printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
+	//printf("目前csr寄存器将会被赋值为：0x%08x\n",preval|src1);
 	R(rd)=preval;
 );
 
