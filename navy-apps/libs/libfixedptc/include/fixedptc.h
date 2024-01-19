@@ -150,12 +150,14 @@ static inline fixedpt fixedpt_abs(fixedpt A) {
 	return 0;
 }
 
+//向下取整
 static inline fixedpt fixedpt_floor(fixedpt A) {
-	return 0;
+	return A & (~FIXEDPT_FMASK);
 }
 
+//向上取整
 static inline fixedpt fixedpt_ceil(fixedpt A) {
-	return 0;
+	return ((A & FIXEDPT_FMASK) == 0) ? A : (A & (~FIXEDPT_FMASK)) + FIXEDPT_ONE;
 }
 
 /*

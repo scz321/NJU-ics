@@ -7,13 +7,22 @@
 #include <sys/time.h>
 #include <assert.h>
 
+//
+
+#include <sys/stat.h>
+
+
+#include <time.h>
+
+
+
 static int evtdev = -1;
 static int fbdev = -1;
 static int screen_w = 0, screen_h = 0;
 
 uint32_t NDL_GetTicks() {
    struct timeval tv;
-   _gettimeofday(&tv,NULL);
+//    _gettimeofday(&tv,NULL);
 
   return tv.tv_usec / 1000 + tv.tv_sec * 1000;
 }
